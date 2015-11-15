@@ -18,6 +18,10 @@ public class Proizvodi {
 
 	private int rabat;
 
+	private int maliStanje;
+
+	private int velikiStanje;
+
 	public int getSifra() {
 		return sifra;
 	}
@@ -58,11 +62,23 @@ public class Proizvodi {
 		this.rabat = rabat;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return this.getNaziv()+"";
+	public int getMaliStanje() {
+		return maliStanje;
 	}
+
+	public void setMaliStanje(int maliStanje) {
+		this.maliStanje = maliStanje;
+	}
+
+	public int getVelikiStanje() {
+		return velikiStanje;
+	}
+
+	public void setVelikiStanje(int velikiStanje) {
+		this.velikiStanje = velikiStanje;
+	}
+
+
 
 
 }

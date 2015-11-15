@@ -39,6 +39,7 @@ public class Test {
 		proizvod5.setNaziv("Naziv 5. proizvoda");
 		proizvod6.setNaziv("Naziv 6. proizvoda");
 
+
 		proizvod1.setSifra(00001);
 		proizvod2.setSifra(00002);
 		proizvod3.setSifra(00003);
@@ -66,6 +67,20 @@ public class Test {
 		proizvod4.setCijena(2345);
 		proizvod5.setCijena(9214);
 		proizvod6.setCijena(580);
+
+
+		proizvod1.setMaliStanje(3);
+		proizvod1.setVelikiStanje(10);
+		proizvod2.setMaliStanje(0);
+		proizvod2.setVelikiStanje(40);
+		proizvod3.setMaliStanje(10);
+		proizvod3.setVelikiStanje(40);
+		proizvod4.setMaliStanje(5);
+		proizvod4.setVelikiStanje(12);
+		proizvod5.setMaliStanje(30);
+		proizvod5.setVelikiStanje(100);
+		proizvod6.setMaliStanje(1);
+		proizvod6.setVelikiStanje(13);
 
 
 		SessionFactory sf = conf.buildSessionFactory();
