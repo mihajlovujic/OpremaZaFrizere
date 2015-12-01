@@ -21,7 +21,7 @@ public class Test {
 		conf.setProperty("hibernate.connection.url", "jdbc:h2:"+putanja);
 		conf.setProperty("hibernate.connection.username", "ognjen");
 		conf.setProperty("hibernate.connection.password", "");
-		conf.setProperty("hibernate.hbm2ddl.auto", "create");
+		conf.setProperty("hibernate.hbm2ddl.auto", "update");
 		conf.setProperty("hibernate.connection.autocommit","true");
 		conf.addAnnotatedClass(Proizvodi.class);
 
@@ -40,12 +40,12 @@ public class Test {
 		proizvod6.setNaziv("Naziv 6. proizvoda");
 
 
-		proizvod1.setSifra(00001);
-		proizvod2.setSifra(00002);
-		proizvod3.setSifra(00003);
-		proizvod4.setSifra(00004);
-		proizvod5.setSifra(00005);
-		proizvod6.setSifra(00006);
+		proizvod1.setSifra("00001");
+		proizvod2.setSifra("00002");
+		proizvod3.setSifra("00003");
+		proizvod4.setSifra("00004");
+		proizvod5.setSifra("00005");
+		proizvod6.setSifra("00006");
 
 		proizvod1.setPdv(20);
 		proizvod2.setPdv(20);
@@ -98,7 +98,7 @@ public class Test {
 		sesija.getTransaction().commit();
 
 		sesija.close();
-
+		sf.close();
 
 	}
 

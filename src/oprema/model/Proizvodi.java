@@ -1,6 +1,9 @@
 package oprema.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -8,25 +11,25 @@ public class Proizvodi {
 
 
 	@Id
-	private int sifra;
-
+	private String sifra;
+	@Column
 	private String naziv;
-
+	@Column
 	private int cijena;
-
+	@Column
 	private int pdv;
-
+	@Column
 	private int rabat;
-
+	@Column
 	private int maliStanje;
-
+	@Column
 	private int velikiStanje;
 
-	public int getSifra() {
+	public String getSifra() {
 		return sifra;
 	}
 
-	public void setSifra(int sifra) {
+	public void setSifra(String sifra) {
 		this.sifra = sifra;
 	}
 
@@ -76,6 +79,12 @@ public class Proizvodi {
 
 	public void setVelikiStanje(int velikiStanje) {
 		this.velikiStanje = velikiStanje;
+	}
+
+	@Override
+	public String toString() {
+		return "Proizvodi [sifra=" + sifra + ", naziv=" + naziv + ", cijena=" + cijena + ", pdv=" + pdv + ", rabat="
+				+ rabat + ", maliStanje=" + maliStanje + ", velikiStanje=" + velikiStanje + "]";
 	}
 
 
