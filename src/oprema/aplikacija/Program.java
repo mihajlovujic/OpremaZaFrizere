@@ -3,6 +3,8 @@ package oprema.aplikacija;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -12,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,40 +34,40 @@ public class Program extends Application {
 
 
 	@FXML
-    private TextField saRabatom;
+	private TextField saRabatom;
 
-    @FXML
-    private TextField rabat;
+	@FXML
+	private TextField rabat;
 
-    @FXML
-    private TextField pdv;
+	@FXML
+	private TextField pdv;
 
-    @FXML
-    private TextField ukupno;
+	@FXML
+	private TextField ukupno;
 
-    @FXML
-    private TextField maliMagacin;
+	@FXML
+	private TextField maliMagacin;
 
-    @FXML
-    private Button dodaj;
+	@FXML
+	private Button dodaj;
 
-    @FXML
-    private TextField naziv;
+	@FXML
+	private TextField naziv;
 
-    @FXML
-    private TextField pdvUkupno;
+	@FXML
+	private TextField pdvUkupno;
 
-    @FXML
-    private TextField kolicina;
+	@FXML
+	private TextField kolicina;
 
-    @FXML
-    private TextField sifra;
+	@FXML
+	private TextField sifra;
 
-    @FXML
-    private TextField velikiMagacin;
+	@FXML
+	private TextField velikiMagacin;
 
-    @FXML
-    private TextField cijena;
+	@FXML
+	private TextField cijena;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -78,18 +81,13 @@ public class Program extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				popuniProizvodZaUnos();
+				if(popuniProizvodZaUnos())
+					if( sifra.getSkin() instanceof BehaviorSkinBase) {
+						((BehaviorSkinBase) sifra.getSkin()).getBehavior().traverseNext();
+					}
 			}
 
 
-		});
-		ukupno.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if(!newValue)
-					Platform.runLater(()->{dodaj.requestFocus();});
-			}
 		});
 		dodaj.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -125,7 +123,7 @@ public class Program extends Application {
 	}
 
 
-	private void popuniProizvodZaUnos() {
+	private boolean popuniProizvodZaUnos() {
 		Proizvodi nadjeni=ps.getProizvodPoSifri(sifra.getText());
 		if(nadjeni==null){
 			Stage upozorenje=new Stage();
@@ -156,7 +154,7 @@ public class Program extends Application {
 			upozorenje.sizeToScene();
 			upozorenje.centerOnScreen();
 			upozorenje.show();
-			return;
+			return false;
 		}
 		naziv.setText(nadjeni.getNaziv());
 		kolicina.setText("1");
@@ -165,7 +163,15 @@ public class Program extends Application {
 		pdv.setText(nadjeni.getPdv()+"");
 		maliMagacin.setText(nadjeni.getMaliStanje()+"");
 		velikiMagacin.setText(nadjeni.getVelikiStanje()+"");
+		return true;
+	}
 
+	@FXML
+	void dajFokus(ActionEvent event) {
+		TextField tf=(TextField)event.getSource();
+		if( tf.getSkin() instanceof BehaviorSkinBase) {
+			((BehaviorSkinBase) tf.getSkin()).getBehavior().traverseNext();
+		}
 	}
 
 }
