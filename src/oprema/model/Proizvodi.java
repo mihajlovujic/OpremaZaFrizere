@@ -135,16 +135,17 @@ public class Proizvodi {
 	}
 
 	private void postaviSaRabatom(){
-		//Postavi funkciju koja izracunava glavnicu sa rabatom i smjesta je u promjenljivu cijenaSaRabatom
+		cijenaSaRabatom=cijena/rabat*kolicina;
 	}
 
 	private void postaviPDV(){
 		//Napisi funkciju koja izracunava kolicinu pdv-a u odnosu na njegov procenat i ukupnu cijenu sa rabatom
 		//vidi iz onog racuna kako se racunaju cijena sa rabatom i kolicina pdv-a
+		cijenaPDV=cijenaSaRabatom*pdv/100;
 	}
 
 	private void postaviUkupno(){
-		//funkcija koja racuna ukupnu cijenu proizvoda
+		cijenaUkupno=cijenaSaRabatom+cijenaPDV;
 	}
 
 	@Override
