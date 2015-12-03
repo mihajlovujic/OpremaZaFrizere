@@ -135,7 +135,7 @@ public class Proizvodi {
 	}
 
 	private void postaviSaRabatom(){
-		cijenaSaRabatom=cijena/rabat*kolicina;
+		cijenaSaRabatom=cijena/(rabat/100)*kolicina;
 	}
 
 	private void postaviPDV(){
