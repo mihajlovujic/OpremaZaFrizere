@@ -95,6 +95,7 @@ public class Program extends Application {
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
 				System.out.println(ps.getProizvodPoSifri(sifra.getText()));
+				Platform.runLater(()->{sifra.requestFocus();});
 			}
 		});
 		dodaj.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -102,8 +103,9 @@ public class Program extends Application {
 			@Override
 			public void handle(KeyEvent event) {
 				// TODO Auto-generated method stub
-				if(event.getCode().equals(KeyCode.ENTER))
-					Platform.runLater(()->{dodaj.fire();});
+				if(event.getCode().equals(KeyCode.ENTER)){
+					Platform.runLater(()->{dodaj.fire(); sifra.requestFocus();});
+				}
 			}
 		});
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
