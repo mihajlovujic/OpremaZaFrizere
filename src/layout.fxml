@@ -10,14 +10,14 @@
       <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -25,23 +25,23 @@
          </rowConstraints>
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Šifra proizvoda" wrapText="true" GridPane.rowIndex="0" />
-            <TextField fx:id="sifra" alignment="CENTER" prefHeight="25.0" prefWidth="147.0" GridPane.rowIndex="1" />
+            <TextField fx:id="sifra" alignment="CENTER" prefColumnCount="30" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Naziv proizvoda" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextField fx:id="naziv" alignment="CENTER" onAction="#dajFokus" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="naziv" alignment="CENTER" onAction="#dajFokus" prefColumnCount="30" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Količina" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <TextField fx:id="kolicina" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="kolicina" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Cena" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <TextField fx:id="cijena" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField fx:id="rabat" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="cijena" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="7" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <TextField fx:id="rabat" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Rabat" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="0" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" prefHeight="53.0" prefWidth="57.0" text="Cena sa &#10;rabatom" GridPane.columnIndex="5" GridPane.rowIndex="0" />
-            <TextField fx:id="saRabatom" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <TextField fx:id="pdv" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+            <TextField fx:id="saRabatom" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField fx:id="pdv" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="6" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="PDV" wrapText="true" GridPane.columnIndex="6" GridPane.rowIndex="0" />
-            <TextField fx:id="pdvUkupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+            <TextField fx:id="pdvUkupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="7" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Cena sa PDV-om" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="7" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Ukupno" wrapText="true" GridPane.columnIndex="8" />
-            <TextField fx:id="ukupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefHeight="25.0" prefWidth="98.0" GridPane.columnIndex="8" GridPane.rowIndex="1" />
+            <TextField fx:id="ukupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="8" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <HBox alignment="CENTER" prefHeight="54.0" prefWidth="860.0" spacing="20.0" VBox.vgrow="SOMETIMES">

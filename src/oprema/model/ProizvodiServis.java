@@ -56,6 +56,10 @@ public class ProizvodiServis {
 	}
 
 	public Proizvodi getProizvodPoSifri(String sifra){
-		return (Proizvodi) getSession().get(Proizvodi.class, sifra);
+		Proizvodi trazeni=(Proizvodi) getSession().get(Proizvodi.class, sifra);
+		if(trazeni!=null){
+			trazeni.postaviSve();
+		}
+		return trazeni;
 	}
 }

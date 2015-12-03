@@ -31,6 +31,7 @@ import oprema.model.ProizvodiServis;
 public class Program extends Application {
 	List<Proizvodi> trenutni=new ArrayList<>(100);
 	ProizvodiServis ps=new ProizvodiServis();
+	Proizvodi unos=null;
 
 
 	@FXML
@@ -94,7 +95,12 @@ public class Program extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				System.out.println(ps.getProizvodPoSifri(sifra.getText()));
+				if(unos!=null)
+					System.out.println(ps.getProizvodPoSifri(sifra.getText()));
+				else{
+					Upozorenje up=new Upozorenje("Ne može se u račun dodati nepostojeći proizvod");
+					up.prikazi();
+				}
 				Platform.runLater(()->{sifra.requestFocus();});
 			}
 		});
@@ -126,45 +132,22 @@ public class Program extends Application {
 
 
 	private boolean popuniProizvodZaUnos() {
-		Proizvodi nadjeni=ps.getProizvodPoSifri(sifra.getText());
-		if(nadjeni==null){
-			Stage upozorenje=new Stage();
-			upozorenje.initModality(Modality.APPLICATION_MODAL);
-			VBox kontrole=new VBox();
-			kontrole.getChildren().add(new Label("Ne postoji proizvod sa datom šifrom"));
-			kontrole.setAlignment(Pos.CENTER);
-			Button dugme=new Button("Potvrdi");
-			dugme.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					upozorenje.close();
-				}
-			});
-			dugme.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-				@Override
-				public void handle(KeyEvent event) {
-					// TODO Auto-generated method stub
-					if(event.getCode().equals(KeyCode.ENTER))
-						Platform.runLater(()->{dugme.fire();});
-				}
-			});
-			kontrole.getChildren().add(dugme);
-			upozorenje.setScene(new Scene(kontrole));
-			upozorenje.sizeToScene();
-			upozorenje.centerOnScreen();
-			upozorenje.show();
+		unos=ps.getProizvodPoSifri(sifra.getText());
+		if(unos==null){
+			Upozorenje up=new Upozorenje("Ne postoji proizvod sa traženom šifrom u bazi");
+			up.prikazi();
 			return false;
 		}
-		naziv.setText(nadjeni.getNaziv());
+		naziv.setText(unos.getNaziv());
 		kolicina.setText("1");
-		cijena.setText(nadjeni.getCijena()+"");
-		rabat.setText(nadjeni.getRabat()+"");
-		pdv.setText(nadjeni.getPdv()+"");
-		maliMagacin.setText(nadjeni.getMaliStanje()+"");
-		velikiMagacin.setText(nadjeni.getVelikiStanje()+"");
+		cijena.setText(unos.getCijena()+"");
+		rabat.setText(unos.getRabat()+"");
+		pdv.setText(unos.getPdv()+"");
+		saRabatom.setText(unos.getCijenaSaRabatom()+"");
+		pdvUkupno.setText(unos.getCijenaPDV()+"");
+		ukupno.setText(unos.getCijenaUkupno()+"");
+		maliMagacin.setText(unos.getMaliStanje()+"");
+		velikiMagacin.setText(unos.getVelikiStanje()+"");
 		return true;
 	}
 

@@ -17,7 +17,7 @@ public class Proizvodi {
 	@Column
 	private String naziv;
 	@Column
-	private int cijena;
+	private double cijena;
 	@Column
 	private int pdv;
 	@Column
@@ -31,13 +31,13 @@ public class Proizvodi {
 	private int kolicina=1;
 
 	@Transient
-	private int cijenaSaRabatom;
+	private double cijenaSaRabatom;
 
 	@Transient
-	private int cijenaPDV;
+	private double cijenaPDV;
 
 	@Transient
-	private int cijenaUkupno;
+	private double cijenaUkupno;
 
 
 	public Proizvodi(){
@@ -60,11 +60,13 @@ public class Proizvodi {
 		this.naziv = naziv;
 	}
 
-	public int getCijena() {
+
+
+	public double getCijena() {
 		return cijena;
 	}
 
-	public void setCijena(int cijena) {
+	public void setCijena(double cijena) {
 		this.cijena = cijena;
 	}
 
@@ -110,44 +112,40 @@ public class Proizvodi {
 		this.kolicina = kolicina;
 	}
 
-	public int getCijenaSaRabatom() {
+
+
+	public double getCijenaSaRabatom() {
 		return cijenaSaRabatom;
 	}
 
-	public void setCijenaSaRabatom(int cijenaSaRabatom) {
-		this.cijenaSaRabatom = cijenaSaRabatom;
-	}
-
-	public int getCijenaPDV() {
+	public double getCijenaPDV() {
 		return cijenaPDV;
 	}
 
-	public void setCijenaPDV(int cijenaPDV) {
-		this.cijenaPDV = cijenaPDV;
-	}
-
-	public int getCijenaUkupno() {
+	public double getCijenaUkupno() {
 		return cijenaUkupno;
 	}
 
-	public void setCijenaUkupno(int cijenaUkupno) {
-		this.cijenaUkupno = cijenaUkupno;
-	}
 
 	private void postaviSaRabatom(){
-		cijenaSaRabatom=cijena/(rabat/100)*kolicina;
+		cijenaSaRabatom=cijena/(rabat/(100+0.0))*kolicina;
 	}
 
 	private void postaviPDV(){
 		//Napisi funkciju koja izracunava kolicinu pdv-a u odnosu na njegov procenat i ukupnu cijenu sa rabatom
 		//vidi iz onog racuna kako se racunaju cijena sa rabatom i kolicina pdv-a
-		cijenaPDV=cijenaSaRabatom*pdv/100;
+		cijenaPDV=cijenaSaRabatom*(pdv/(100+0.0));
 	}
 
 	private void postaviUkupno(){
 		cijenaUkupno=cijenaSaRabatom+cijenaPDV;
 	}
 
+	public void postaviSve(){
+		postaviSaRabatom();
+		postaviPDV();
+		postaviUkupno();
+	}
 	@Override
 	public String toString() {
 		return "Proizvodi [sifra=" + sifra + ", naziv=" + naziv + ", cijena=" + cijena + ", pdv=" + pdv + ", rabat="

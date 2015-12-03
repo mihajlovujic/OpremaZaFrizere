@@ -21,7 +21,7 @@ public class Test {
 		conf.setProperty("hibernate.connection.url", "jdbc:h2:"+putanja);
 		conf.setProperty("hibernate.connection.username", "ognjen");
 		conf.setProperty("hibernate.connection.password", "");
-		conf.setProperty("hibernate.hbm2ddl.auto", "update");
+		conf.setProperty("hibernate.hbm2ddl.auto", "create");
 		conf.setProperty("hibernate.connection.autocommit","true");
 		conf.addAnnotatedClass(Proizvodi.class);
 
@@ -94,7 +94,14 @@ public class Test {
 		sesija.save(proizvod4);
 		sesija.save(proizvod5);
 		sesija.save(proizvod6);
-
+		Proizvodi njen=new Proizvodi();
+		njen.setNaziv("Njen proizvod");
+		njen.setSifra("abcd");
+		njen.setCijena(1554.87);
+		njen.setRabat(150);
+		njen.setPdv(20);
+		njen.setKolicina(1);
+		sesija.save(njen);
 		sesija.getTransaction().commit();
 
 		sesija.close();
