@@ -14,11 +14,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Upozorenje extends Stage implements EventHandler<ActionEvent>{
-
-	public Upozorenje(String poruka){
+	Label labela=new Label();
+	String poruka=new String();
+	public Upozorenje(){
 		this.initModality(Modality.APPLICATION_MODAL);
 		VBox kontrole=new VBox();
-		kontrole.getChildren().add(new Label(poruka));
+		kontrole.getChildren().add(labela);
 		kontrole.setAlignment(Pos.CENTER);
 		Button dugme=new Button("Potvrdi");
 		dugme.setOnAction(this);
@@ -35,7 +36,12 @@ public class Upozorenje extends Stage implements EventHandler<ActionEvent>{
 		this.setScene(new Scene(kontrole));
 		this.sizeToScene();
 	}
+
+	public void setPoruka(String por){
+		this.poruka=por;
+	}
 	public void prikazi(){
+		labela.setText(poruka);
 		this.show();
 		this.centerOnScreen();
 	}

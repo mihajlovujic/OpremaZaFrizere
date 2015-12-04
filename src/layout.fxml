@@ -7,10 +7,27 @@
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <GridPane hgap="10.0" vgap="5.0" VBox.vgrow="NEVER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Šifra proizvoda" wrapText="true" GridPane.columnIndex="0" />
+            <TextField fx:id="sifra" alignment="CENTER" prefColumnCount="30" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Naziv proizvoda" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" />
+            <TextField fx:id="naziv" alignment="CENTER" onAction="#dajFokus" prefColumnCount="30" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+         <padding>
+            <Insets left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
       <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
          <columnConstraints>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
@@ -24,24 +41,20 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Šifra proizvoda" wrapText="true" GridPane.rowIndex="0" />
-            <TextField fx:id="sifra" alignment="CENTER" prefColumnCount="30" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Naziv proizvoda" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextField fx:id="naziv" alignment="CENTER" onAction="#dajFokus" prefColumnCount="30" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Količina" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <TextField fx:id="kolicina" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Cena" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <TextField fx:id="cijena" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="7" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField fx:id="rabat" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Rabat" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" prefHeight="53.0" prefWidth="57.0" text="Cena sa &#10;rabatom" GridPane.columnIndex="5" GridPane.rowIndex="0" />
-            <TextField fx:id="saRabatom" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <TextField fx:id="pdv" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="PDV" wrapText="true" GridPane.columnIndex="6" GridPane.rowIndex="0" />
-            <TextField fx:id="pdvUkupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Cena sa PDV-om" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="7" />
-            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Ukupno" wrapText="true" GridPane.columnIndex="8" />
-            <TextField fx:id="ukupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="8" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Količina" wrapText="true" GridPane.rowIndex="0" />
+            <TextField fx:id="kolicina" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Cena" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <TextField fx:id="cijena" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="7" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="rabat" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Rabat" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" prefHeight="53.0" prefWidth="57.0" text="Cena sa &#10;rabatom" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+            <TextField fx:id="saRabatom" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <TextField fx:id="pdv" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="PDV" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            <TextField fx:id="pdvUkupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Cena sa PDV-om" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="5" />
+            <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Ukupno" wrapText="true" GridPane.columnIndex="6" />
+            <TextField fx:id="ukupno" alignment="CENTER_RIGHT" onAction="#dajFokus" prefColumnCount="9" GridPane.columnIndex="6" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <HBox alignment="CENTER" prefHeight="54.0" prefWidth="860.0" spacing="20.0" VBox.vgrow="SOMETIMES">
@@ -56,7 +69,7 @@
             <Button fx:id="dodaj" mnemonicParsing="false" text="Dodaj u račun" />
          </children>
       </HBox>
-      <TableView prefHeight="282.0" prefWidth="931.0" />
+      <TableView fx:id="tabela" prefHeight="282.0" prefWidth="931.0" />
       <HBox prefHeight="151.0" prefWidth="931.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
@@ -74,20 +87,20 @@
                      </rowConstraints>
                      <children>
                         <Label text="naziv" />
-                        <TextField alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" />
+                        <TextField fx:id="kupacNaziv" alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" />
                         <Label text="Adresa" GridPane.rowIndex="1" />
-                        <TextField alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="kupacAdresa" alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Mesto" GridPane.rowIndex="2" />
-                        <TextField alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="kupacMjesto" alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="PIB" GridPane.rowIndex="3" />
-                        <TextField alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="kupacPIB" alignment="CENTER" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
                   <VBox alignment="CENTER" spacing="20.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Napravi Kupca" wrapText="true" />
-                        <Button mnemonicParsing="false" text="Generiši račun" />
-                        <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="115.0" text="Stanje u &#10;magacinima" textAlignment="CENTER" />
+                        <Button fx:id="napraviKupca" mnemonicParsing="false" text="Napravi Kupca" wrapText="true" />
+                        <Button fx:id="generisiRacun" mnemonicParsing="false" text="Generiši račun" />
+                        <Button fx:id="magaciniB" mnemonicParsing="false" prefHeight="44.0" prefWidth="115.0" text="Stanje u &#10;magacinima" textAlignment="CENTER" />
                      </children>
                   </VBox>
                </children>
@@ -104,11 +117,11 @@
                </rowConstraints>
                <children>
                   <Label alignment="CENTER" text="Ukupna glavnica" textAlignment="CENTER" wrapText="true" />
-                  <TextField alignment="CENTER_RIGHT" focusTraversable="false" GridPane.columnIndex="1" />
+                  <TextField fx:id="ukupnoG" alignment="CENTER_RIGHT" focusTraversable="false" GridPane.columnIndex="1" />
                   <Label text="Ukupan PDV" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
-                  <TextField alignment="CENTER_RIGHT" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="ukupnoPDV" alignment="CENTER_RIGHT" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Ukupno" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                  <TextField alignment="CENTER_RIGHT" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="ukupnoC" alignment="CENTER_RIGHT" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </children>
