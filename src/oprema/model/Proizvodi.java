@@ -17,7 +17,7 @@ public class Proizvodi {
 	@Column
 	private String naziv;
 	@Column
-	private double cijena;
+	private int cijena;
 	@Column
 	private int pdv;
 	@Column
@@ -31,13 +31,13 @@ public class Proizvodi {
 	private int kolicina=1;
 
 	@Transient
-	private double cijenaSaRabatom;
+	private int cijenaSaRabatom;
 
 	@Transient
-	private double cijenaPDV;
+	private int cijenaPDV;
 
 	@Transient
-	private double cijenaUkupno;
+	private int cijenaUkupno;
 
 
 	public Proizvodi(){
@@ -62,12 +62,17 @@ public class Proizvodi {
 
 
 
-	public double getCijena() {
+	public int getCijena() {
 		return cijena;
 	}
 
+	public double getCijenaDb(){
+		return cijena/(100.00);
+	}
+
 	public void setCijena(double cijena) {
-		this.cijena = cijena;
+		this.cijena = (int) Math.round(cijena*100);
+		postaviSve();
 	}
 
 	public int getPdv() {
@@ -76,6 +81,7 @@ public class Proizvodi {
 
 	public void setPdv(int pdv) {
 		this.pdv = pdv;
+		postaviSve();
 	}
 
 	public int getRabat() {
@@ -84,6 +90,7 @@ public class Proizvodi {
 
 	public void setRabat(int rabat) {
 		this.rabat = rabat;
+		postaviSve();
 	}
 
 	public int getMaliStanje() {
@@ -110,31 +117,44 @@ public class Proizvodi {
 
 	public void setKolicina(int kolicina) {
 		this.kolicina = kolicina;
+		postaviSve();
 	}
 
 
 
-	public double getCijenaSaRabatom() {
+	public int getCijenaSaRabatom() {
 		return cijenaSaRabatom;
 	}
 
-	public double getCijenaPDV() {
+	public double getCijenaSaRabatomDb(){
+		return cijenaSaRabatom/100.00;
+	}
+
+	public int getCijenaPDV() {
 		return cijenaPDV;
 	}
 
-	public double getCijenaUkupno() {
+	public double getCijenaPDVDb(){
+		return cijenaPDV/100.00;
+	}
+
+	public int getCijenaUkupno() {
 		return cijenaUkupno;
+	}
+
+	public double getCijenaUkupnoDb(){
+		return cijenaUkupno/100.00;
 	}
 
 
 	private void postaviSaRabatom(){
-		cijenaSaRabatom=cijena/(rabat/(100+0.0))*kolicina;
+		cijenaSaRabatom=(int) Math.round(cijena/(rabat/(100+0.0))*kolicina);
 	}
 
 	private void postaviPDV(){
 		//Napisi funkciju koja izracunava kolicinu pdv-a u odnosu na njegov procenat i ukupnu cijenu sa rabatom
 		//vidi iz onog racuna kako se racunaju cijena sa rabatom i kolicina pdv-a
-		cijenaPDV=cijenaSaRabatom*(pdv/(100+0.0));
+		cijenaPDV=(int) Math.round(cijenaSaRabatom*(pdv/(100+0.0)));
 	}
 
 	private void postaviUkupno(){

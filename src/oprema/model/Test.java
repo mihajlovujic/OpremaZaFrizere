@@ -61,12 +61,12 @@ public class Test {
 		proizvod5.setRabat(210);
 		proizvod6.setRabat(200);
 
-		proizvod1.setCijena(1000);
-		proizvod2.setCijena(2000);
-		proizvod3.setCijena(1500);
-		proizvod4.setCijena(2345);
-		proizvod5.setCijena(9214);
-		proizvod6.setCijena(580);
+		proizvod1.setCijena(100000);
+		proizvod2.setCijena(200000);
+		proizvod3.setCijena(150000);
+		proizvod4.setCijena(234500);
+		proizvod5.setCijena(921400);
+		proizvod6.setCijena(58000);
 
 
 		proizvod1.setMaliStanje(3);

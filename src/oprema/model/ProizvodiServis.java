@@ -43,6 +43,7 @@ public class ProizvodiServis {
 
 		}
 		s.close();
+		s=null;
 	}
 
 	public void zatvoriKlasu(){
@@ -52,14 +53,40 @@ public class ProizvodiServis {
 	}
 	public List<Proizvodi> getProizvodSifraLike(String sifra){
 		List<Proizvodi> proiz=(List<Proizvodi>) getSession().createCriteria(Proizvodi.class).add(Restrictions.like("sifra", sifra));
+		vratiSesiju();
 		return proiz;
 	}
 
 	public Proizvodi getProizvodPoSifri(String sifra){
+
 		Proizvodi trazeni=(Proizvodi) getSession().get(Proizvodi.class, sifra);
 		if(trazeni!=null){
 			trazeni.postaviSve();
 		}
+		vratiSesiju();
 		return trazeni;
+	}
+
+	public void izbrisiProizvod(Proizvodi p){
+		Proizvodi trazeni=(Proizvodi)getSession().get(Proizvodi.class, p.getSifra());
+		if(trazeni==null)
+			return;
+		getSession().delete(trazeni);
+		vratiSesiju();
+	}
+
+	public void apdejtuj(Proizvodi p){
+		Proizvodi trazeni=(Proizvodi)getSession().get(Proizvodi.class, p.getSifra());
+		if(trazeni==null)
+			return;
+
+		getSession().merge(p);
+		vratiSesiju();
+	}
+
+	public List<Proizvodi> sviProizvodi(){
+		List<Proizvodi> svi=(List<Proizvodi>)getSession().createCriteria(Proizvodi.class).list();
+		vratiSesiju();
+		return svi;
 	}
 }
