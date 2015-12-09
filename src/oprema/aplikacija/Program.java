@@ -1,5 +1,6 @@
 package oprema.aplikacija;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -321,6 +322,34 @@ public class Program extends Application {
 		});
         napraviTabelu(tabela);
         postaviZbirove(null);
+
+        napraviKupca.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					KupacP kup=new KupacP(ps);
+					kup.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+						@Override
+						public void handle(WindowEvent event) {
+							System.out.println("Handlujem");
+							if(kup.getKupac()!=null){
+								kupacPIB.setText(kup.getKupac().getPib()+"");
+								kupacAdresa.setText(kup.getKupac().getAdresa());
+								kupacMjesto.setText(kup.getKupac().getMjesto());
+								kupacNaziv.setText(kup.getKupac().getNaziv());
+							}
+						}
+					});
+					kup.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
     }
 
 	private void napraviTabelu(TableView<Proizvodi> tabela2) {

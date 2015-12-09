@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane prefHeight="251.0" prefWidth="364.0">
+         <children>
+            <Label text="naziv" GridPane.rowIndex="1" />
+            <TextField fx:id="kupacNaziv" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Adresa" GridPane.rowIndex="2" />
+            <TextField fx:id="kupacAdresa" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Mesto" GridPane.rowIndex="3" />
+            <TextField fx:id="kupacMjesto" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="PIB" />
+            <TextField fx:id="kupacPIB" alignment="CENTER" GridPane.columnIndex="1" />
+         </children>
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+         <children>
+            <Button fx:id="unosB" mnemonicParsing="false" text="Unesi" />
+            <Button fx:id="otkazB" mnemonicParsing="false" text="Otkaži" />
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>
