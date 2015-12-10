@@ -1,16 +1,24 @@
 package oprema.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Kupac {
-	
+	@Column
 	private String naziv;
+	@Column
 	private String adresa;
+	@Column
 	private String mjesto;
+	@Id
 	private int pib;
-	
-	
+
+
 	public Kupac()
 	{
-		
+
 	}
 
 
@@ -52,8 +60,8 @@ public class Kupac {
 	public void setPib(int pib) {
 		this.pib = pib;
 	}
-	
-	
-	
+
+
+
 
 }

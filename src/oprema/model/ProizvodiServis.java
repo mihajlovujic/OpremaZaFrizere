@@ -27,6 +27,7 @@ public class ProizvodiServis {
 		conf.setProperty("hibernate.hbm2ddl.auto", "update");
 		conf.setProperty("hibernate.connection.autocommit","true");
 		conf.addAnnotatedClass(Proizvodi.class);
+		conf.addAnnotatedClass(Kupac.class);
 		sf=conf.buildSessionFactory();
 	}
 	public Session getSession(){
@@ -89,4 +90,26 @@ public class ProizvodiServis {
 		vratiSesiju();
 		return svi;
 	}
+
+	public List<Kupac> sviKupci(){
+		List<Kupac> svi=getSession().createCriteria(Kupac.class).list();
+		vratiSesiju();
+		return svi;
+	}
+	public Kupac poPIBu(int pib){
+		Kupac rez=getSession().get(Kupac.class, pib);
+		vratiSesiju();
+		return rez;
+	}
+
+	public void izbrisiKupca(int pib){
+		getSession().delete(getSession().get(Kupac.class, pib));
+		vratiSesiju();
+	}
+
+	public void unesiKupca(Kupac k){
+		getSession().merge(k);
+		vratiSesiju();
+	}
+
 }

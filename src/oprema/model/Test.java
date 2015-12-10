@@ -24,6 +24,7 @@ public class Test {
 		conf.setProperty("hibernate.hbm2ddl.auto", "create");
 		conf.setProperty("hibernate.connection.autocommit","true");
 		conf.addAnnotatedClass(Proizvodi.class);
+		conf.addAnnotatedClass(Kupac.class);
 
 		Proizvodi proizvod1 = new Proizvodi();
 		Proizvodi proizvod2 = new Proizvodi();
@@ -102,6 +103,13 @@ public class Test {
 		njen.setPdv(20);
 		njen.setKolicina(1);
 		sesija.save(njen);
+		Kupac k=new Kupac();
+		k.setPib(12345678);
+		k.setMjesto("Beograd");
+		k.setAdresa("Golubinačka 5");
+		k.setNaziv("Neki naziv");
+		sesija.save(k);
+
 		sesija.getTransaction().commit();
 
 		sesija.close();

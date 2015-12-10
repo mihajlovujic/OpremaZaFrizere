@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -18,6 +19,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class KupacP extends Stage implements EventHandler<ActionEvent>{
 	@FXML
@@ -71,18 +74,62 @@ public class KupacP extends Stage implements EventHandler<ActionEvent>{
 		assert otkazB != null : "fx:id=\"otkazB\" was not injected: check your FXML file 'Kupac.fxml'.";
 
 		unosB.setOnAction(this);
+		unosB.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode().equals(KeyCode.ENTER))
+					Platform.runLater(()->{unosB.fire();});
+			}
+		});
+		otkazB.setOnAction(this);
+
+		kupacPIB.setOnAction(this);
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
 		if(event.getSource()==unosB){
-			kupac=new Kupac();
-			kupac.setAdresa(kupacAdresa.getText());
-			kupac.setMjesto(kupacMjesto.getText());
-			kupac.setNaziv(kupacNaziv.getText());
-			kupac.setPib(Integer.parseInt(kupacPIB.getText()));
+			try{
+				kupac=new Kupac();
+				kupac.setAdresa(kupacAdresa.getText());
+				kupac.setMjesto(kupacMjesto.getText());
+				kupac.setNaziv(kupacNaziv.getText());
+				kupac.setPib(Integer.parseInt(kupacPIB.getText()));
+			}
+			catch(NumberFormatException e){
+				Upozorenje up=new Upozorenje();
+				up.setPoruka("Unesen nepravilan PIB");
+				up.prikazi();
+				return;
+			}
 			this.fireEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSE_REQUEST));
 		}
+		else if(event.getSource()==otkazB){
+			kupac=null;
+			this.fireEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSE_REQUEST));
+		}
+		else{
+			try{
+				kupac=ps.poPIBu(Integer.parseInt(kupacPIB.getText()));
+			}
+			catch(NumberFormatException e){
+				Upozorenje up=new Upozorenje();
+				up.setPoruka("Unesen nepravilan PIB");
+				up.prikazi();
+			}
+			if(kupac!=null){
+				kupacAdresa.setText(kupac.getAdresa());
+				kupacMjesto.setText(kupac.getMjesto());
+				kupacNaziv.setText(kupac.getNaziv());
+			}
+			else{
+				Upozorenje up=new Upozorenje();
+				up.setPoruka("Ne postoji kupac sa datim PIB-om u bazi");
+				up.prikazi();
+			}
+		}
+
 	}
 
 	public Kupac getKupac() {

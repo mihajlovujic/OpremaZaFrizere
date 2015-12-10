@@ -10,14 +10,14 @@
    <children>
       <GridPane prefHeight="251.0" prefWidth="364.0">
          <children>
+	        <Label text="PIB" />
+            <TextField fx:id="kupacPIB" GridPane.columnIndex="1" />
             <Label text="naziv" GridPane.rowIndex="1" />
             <TextField fx:id="kupacNaziv" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Adresa" GridPane.rowIndex="2" />
             <TextField fx:id="kupacAdresa" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Mesto" GridPane.rowIndex="3" />
             <TextField fx:id="kupacMjesto" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="PIB" />
-            <TextField fx:id="kupacPIB" alignment="CENTER" GridPane.columnIndex="1" />
          </children>
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
