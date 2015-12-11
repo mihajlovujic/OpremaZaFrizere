@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.transaction.NotSupportedException;
 /* U seterima za cijenu,kolicinu,rabat i pdv nakon setovanja promjenljive
  * pozovi potrebne funkcije za racunanje ovih transient vrijednosti
  * */
@@ -39,6 +40,8 @@ public class Proizvodi {
 	@Transient
 	private int cijenaUkupno;
 
+	@Transient
+	private int pozajmicaIzVelikog=0;
 
 	public Proizvodi(){
 
@@ -115,7 +118,9 @@ public class Proizvodi {
 		return kolicina;
 	}
 
-	public void setKolicina(int kolicina) {
+	public void setKolicina(int kolicina) throws IllegalArgumentException {
+		if(kolicina<0)
+			throw new IllegalArgumentException("Količina ne može biti manja od 0");
 		this.kolicina = kolicina;
 		postaviSve();
 	}
@@ -172,6 +177,25 @@ public class Proizvodi {
 				+ rabat + ", maliStanje=" + maliStanje + ", velikiStanje=" + velikiStanje + ", kolicina=" + kolicina
 				+ ", cijenaSaRabatom=" + cijenaSaRabatom + ", cijenaPDV=" + cijenaPDV + ", cijenaUkupno=" + cijenaUkupno
 				+ "]";
+	}
+
+	public void azurirajStanja() throws NotSupportedException {
+		if(this.getKolicina()>(this.getMaliStanje()+this.getVelikiStanje()))
+			throw new NotSupportedException("Nema dovoljno količine na stanju u magacinima"+System.lineSeparator()+"Maksimalno: "+(maliStanje+velikiStanje));
+		this.setMaliStanje(this.getMaliStanje()-this.getKolicina());
+		if(this.getMaliStanje()<0){
+			pozajmicaIzVelikog=Math.abs(this.getMaliStanje());
+			this.setVelikiStanje(this.getVelikiStanje()-pozajmicaIzVelikog);
+			this.setMaliStanje(0);
+		}
+	}
+
+	public void vratiStanja(){
+		int stkol=this.getKolicina();
+		this.setKolicina(0);
+		this.setMaliStanje(this.getMaliStanje()+stkol-pozajmicaIzVelikog);
+		this.setVelikiStanje(this.getVelikiStanje()+pozajmicaIzVelikog);
+		pozajmicaIzVelikog=0;
 	}
 
 

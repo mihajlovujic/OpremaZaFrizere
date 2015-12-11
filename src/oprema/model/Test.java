@@ -2,6 +2,8 @@ package oprema.model;
 
 import java.io.File;
 
+import javax.transaction.NotSupportedException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -10,7 +12,7 @@ import org.hibernate.cfg.Configuration;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalArgumentException, NotSupportedException {
 		// TODO Auto-generated method stub
 
 		Configuration conf = new Configuration();

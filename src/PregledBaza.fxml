@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.TabPane?>
 
-
-<TabPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <tabs>
       <Tab text="Proizvodi">
         <content>
@@ -15,8 +14,8 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
-                        <Label prefHeight="15.0" prefWidth="90.0" text="Pretrazi" />
-                        <Label text="Po sifri:" />
+                        <Label prefHeight="15.0" prefWidth="90.0" text="Pretraži" />
+                        <Label text="Po šifri:" />
                         <TextField fx:id="traziSifra" />
                         <Label text="Po nazivu: " />
                         <TextField fx:id="traziNaziv" />
@@ -74,7 +73,7 @@
       </Tab>
       <Tab text="Kupci">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <VBox />
         </content>
       </Tab>
    </tabs>

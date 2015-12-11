@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.transaction.NotSupportedException;
+
 import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 
 import javafx.application.Application;
@@ -182,6 +184,13 @@ public class Program extends Application {
 			up.prikazi();
 			return;
 		}
+		try {
+			unos.azurirajStanja();
+		} catch (NotSupportedException e) {
+			up.setPoruka(e.getMessage());
+			up.prikazi();
+			return;
+		}
 		tabela.getItems().add(unos);
 		postaviZbirove(unos);
 		unos=null;
@@ -218,7 +227,7 @@ public class Program extends Application {
 			return;
 		}
 		naziv.setText(unos.getNaziv());
-		kolicina.setText("1");
+		kolicina.setText(unos.getKolicina()+"");
 		cijena.setText(unos.getCijenaDb()+"");
 		rabat.setText(unos.getRabat()+"");
 		pdv.setText(unos.getPdv()+"");
@@ -259,9 +268,10 @@ public class Program extends Application {
 				unos.setKolicina(Integer.parseInt(kolicina.getText()));
 				postaviPolja();
 			}
-			catch(NumberFormatException e){
-				up.setPoruka("Nije dobar unos količine");
+			catch(Exception e){
+				up.setPoruka(e.getMessage());
 				up.prikazi();
+				return;
 			}
 		}
 		else if(tf==pdv){
@@ -278,7 +288,8 @@ public class Program extends Application {
 			unos.setNaziv(naziv.getText());
 		}
 		else if(tf==sifra){
-			popuniProizvodZaUnos();
+			if(!popuniProizvodZaUnos())
+				return;
 		}
 		if( tf.getSkin() instanceof BehaviorSkinBase) {
 			((BehaviorSkinBase) tf.getSkin()).getBehavior().traverseNext();
@@ -404,7 +415,24 @@ public class Program extends Application {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
-						param.getValue().setKolicina(newValue.intValue());
+						try {
+							param.getValue().vratiStanja();
+							param.getValue().setKolicina(newValue.intValue());
+							param.getValue().azurirajStanja();
+
+						} catch (Exception e) {
+							param.getValue().setKolicina(oldValue.intValue());
+							try {
+								param.getValue().azurirajStanja();
+							} catch (NotSupportedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							tabela2.refresh();
+							up.setPoruka(e.getMessage());
+							up.prikazi();
+							return;
+						}
 						postaviZbirove(param.getValue());
 					}
 				});
