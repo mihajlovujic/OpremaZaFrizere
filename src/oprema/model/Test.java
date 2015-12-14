@@ -114,9 +114,15 @@ public class Test {
 
 		sesija.getTransaction().commit();
 
+
 		sesija.close();
 		sf.close();
 
+		ProizvodiServis ps=new ProizvodiServis();
+		proizvod1.setVelikiStanje(150);
+		ps.apdejtuj(proizvod1);
+
+		ps.zatvoriKlasu();
 	}
 
 }

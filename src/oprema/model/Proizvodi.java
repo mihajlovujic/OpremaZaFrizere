@@ -198,6 +198,14 @@ public class Proizvodi {
 		pozajmicaIzVelikog=0;
 	}
 
+	public int getPozajmicaIzVelikog() {
+		return pozajmicaIzVelikog;
+	}
+
+	public void setPozajmicaIzVelikog(int pozajmicaIzVelikog) {
+		this.pozajmicaIzVelikog = pozajmicaIzVelikog;
+	}
+
 
 
 

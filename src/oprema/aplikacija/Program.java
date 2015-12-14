@@ -1,9 +1,6 @@
 package oprema.aplikacija;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.transaction.NotSupportedException;
@@ -12,7 +9,6 @@ import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,16 +21,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -42,12 +36,10 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.util.converter.NumberStringConverter;
 import oprema.model.Obracun;
 import oprema.model.Proizvodi;
 import oprema.model.ProizvodiServis;
@@ -57,6 +49,8 @@ public class Program extends Application {
 	Proizvodi unos=null;
 	Upozorenje up=new Upozorenje();
 	Obracun obracun=new Obracun();
+	BazaP  bazaProzor;
+	KupacP kup;
 
 	@FXML
 	private ResourceBundle resources;
@@ -137,6 +131,8 @@ public class Program extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader loader=new FXMLLoader(this.getClass().getClassLoader().getResource("layout.fxml"));
+		bazaProzor=new BazaP(ps,up);
+		kup=new KupacP(ps);
 		loader.setController(this);
 		VBox boxaca=loader.load();
 		Scene scena=new Scene(boxaca);
@@ -205,6 +201,7 @@ public class Program extends Application {
 		if(unos==null){
 			up.setPoruka("Ne postoji proizvod sa traženom šifrom u bazi");
 			up.prikazi();
+			postaviPolja();
 			return false;
 		}
 		postaviPolja();
@@ -240,6 +237,7 @@ public class Program extends Application {
 
 
 
+	@SuppressWarnings("rawtypes")
 	@FXML
 	void dajFokus(ActionEvent event) {
 		TextField tf=(TextField)event.getSource();
@@ -338,26 +336,29 @@ public class Program extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				try {
-					KupacP kup=new KupacP(ps);
-					kup.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				kup.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-						@Override
-						public void handle(WindowEvent event) {
-							System.out.println("Handlujem");
-							if(kup.getKupac()!=null){
-								kupacPIB.setText(kup.getKupac().getPib()+"");
-								kupacAdresa.setText(kup.getKupac().getAdresa());
-								kupacMjesto.setText(kup.getKupac().getMjesto());
-								kupacNaziv.setText(kup.getKupac().getNaziv());
-							}
+					@Override
+					public void handle(WindowEvent event) {
+						System.out.println("Handlujem");
+						if(kup.getKupac()!=null){
+							kupacPIB.setText(kup.getKupac().getPib()+"");
+							kupacAdresa.setText(kup.getKupac().getAdresa());
+							kupacMjesto.setText(kup.getKupac().getMjesto());
+							kupacNaziv.setText(kup.getKupac().getNaziv());
 						}
-					});
-					kup.show();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					}
+				});
+				kup.show();
+
+			}
+		});
+
+        magaciniB.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				bazaProzor.prikazi();
 
 			}
 		});
@@ -590,7 +591,7 @@ public class Program extends Application {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
-						param.getValue().setRabat(newValue.intValue());
+						param.getValue().setMaliStanje(newValue.intValue());
 					}
 				});
 				return si;
@@ -641,7 +642,7 @@ public class Program extends Application {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
-						param.getValue().setRabat(newValue.intValue());
+						param.getValue().setVelikiStanje(newValue.intValue());
 					}
 				});
 				return si;
@@ -893,9 +894,31 @@ public class Program extends Application {
 				return bc;
 			}
 		});
+
+		TableColumn<Proizvodi, Integer> pozajmiceKol=new TableColumn<Proizvodi, Integer>();
+		pozajmiceKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Proizvodi,Integer>, ObservableValue<Integer>>() {
+
+			@Override
+			public ObservableValue<Integer> call(CellDataFeatures<Proizvodi, Integer> param) {
+				SimpleIntegerProperty sp=new SimpleIntegerProperty(param.getValue().getPozajmicaIzVelikog());
+				return sp.asObject();
+			}
+		});
+		pozajmiceKol.setCellFactory(new Callback<TableColumn<Proizvodi,Integer>, TableCell<Proizvodi,Integer>>() {
+
+			@Override
+			public TableCell<Proizvodi, Integer> call(TableColumn<Proizvodi, Integer> param) {
+				// TODO Auto-generated method stub
+				return new TextFieldTableCell<>();
+			}
+		});
+		pozajmiceKol.setEditable(false);
+
+
+
 		tabela2.setEditable(true);
 		tabela2.getSelectionModel().setCellSelectionEnabled(true);
-		tabela2.getColumns().addAll(sifraKol, nazivKol,kolicinaKol,cenaKol, rabatKol, cenaRabKol, pdvKol, cenaPDVKol, ukupnoKol, maliMKol, velikiMKol, izbaci);
+		tabela2.getColumns().addAll(sifraKol, nazivKol,kolicinaKol,cenaKol, rabatKol, cenaRabKol, pdvKol, cenaPDVKol, ukupnoKol, maliMKol, velikiMKol,pozajmiceKol, izbaci);
 	}
 
 

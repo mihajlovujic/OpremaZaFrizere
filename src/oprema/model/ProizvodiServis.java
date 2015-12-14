@@ -8,6 +8,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 public class ProizvodiServis {
@@ -26,6 +27,7 @@ public class ProizvodiServis {
 		conf.setProperty("hibernate.connection.password", "");
 		conf.setProperty("hibernate.hbm2ddl.auto", "update");
 		conf.setProperty("hibernate.connection.autocommit","true");
+		conf.setProperty("hibernate.show_sql", "true");
 		conf.addAnnotatedClass(Proizvodi.class);
 		conf.addAnnotatedClass(Kupac.class);
 		sf=conf.buildSessionFactory();
@@ -38,6 +40,7 @@ public class ProizvodiServis {
 
 	public void vratiSesiju(){
 		try{
+			s.flush();
 			s.getTransaction().commit();
 		}
 		catch(HibernateException h){
@@ -53,7 +56,13 @@ public class ProizvodiServis {
 		sf.close();
 	}
 	public List<Proizvodi> getProizvodSifraLike(String sifra){
-		List<Proizvodi> proiz=(List<Proizvodi>) getSession().createCriteria(Proizvodi.class).add(Restrictions.like("sifra", sifra));
+		List<Proizvodi> proiz=(List<Proizvodi>) getSession().createCriteria(Proizvodi.class).add(Restrictions.like("sifra", sifra, MatchMode.START).ignoreCase()).list();
+		vratiSesiju();
+		return proiz;
+	}
+
+	public List<Proizvodi> getProizvodNazivLike(String naziv){
+		List<Proizvodi> proiz=(List<Proizvodi>)getSession().createCriteria(Proizvodi.class).add(Restrictions.like("naziv", naziv, MatchMode.ANYWHERE).ignoreCase()).list();
 		vratiSesiju();
 		return proiz;
 	}
@@ -78,9 +87,18 @@ public class ProizvodiServis {
 
 	public void apdejtuj(Proizvodi p){
 		Proizvodi trazeni=(Proizvodi)getSession().get(Proizvodi.class, p.getSifra());
-		if(trazeni==null)
+		if(trazeni==null){
+			getSession().save(p);
+			vratiSesiju();
 			return;
-
+		}
+		/*trazeni.setCijena(p.getCijenaDb());
+		trazeni.setRabat(p.getRabat());
+		trazeni.setPdv(p.getPdv());
+		trazeni.setMaliStanje(p.getMaliStanje());
+		trazeni.setVelikiStanje(p.getVelikiStanje());
+		trazeni.setNaziv(p.getNaziv());
+		getSession().save(trazeni);*/
 		getSession().merge(p);
 		vratiSesiju();
 	}

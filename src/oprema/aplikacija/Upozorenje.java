@@ -14,8 +14,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Upozorenje extends Stage implements EventHandler<ActionEvent>{
-	Label labela=new Label();
-	String poruka=new String();
+	private Label labela=new Label();
+	private String poruka=new String();
+
+
 	public Upozorenje(){
 		this.initModality(Modality.APPLICATION_MODAL);
 		VBox kontrole=new VBox();
