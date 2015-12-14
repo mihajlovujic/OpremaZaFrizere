@@ -90,19 +90,13 @@ public class KupacP extends Stage implements EventHandler<ActionEvent>{
 	@Override
 	public void handle(ActionEvent event) {
 		if(event.getSource()==unosB){
-			try{
+
 				kupac=new Kupac();
 				kupac.setAdresa(kupacAdresa.getText());
 				kupac.setMjesto(kupacMjesto.getText());
 				kupac.setNaziv(kupacNaziv.getText());
-				kupac.setPib(Integer.parseInt(kupacPIB.getText()));
-			}
-			catch(NumberFormatException e){
-				Upozorenje up=new Upozorenje();
-				up.setPoruka("Unesen nepravilan PIB");
-				up.prikazi();
-				return;
-			}
+				kupac.setPib(kupacPIB.getText());
+
 			this.fireEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSE_REQUEST));
 		}
 		else if(event.getSource()==otkazB){
@@ -110,14 +104,9 @@ public class KupacP extends Stage implements EventHandler<ActionEvent>{
 			this.fireEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSE_REQUEST));
 		}
 		else{
-			try{
-				kupac=ps.poPIBu(Integer.parseInt(kupacPIB.getText()));
-			}
-			catch(NumberFormatException e){
-				Upozorenje up=new Upozorenje();
-				up.setPoruka("Unesen nepravilan PIB");
-				up.prikazi();
-			}
+
+				kupac=ps.poPIBu(kupacPIB.getText());
+
 			if(kupac!=null){
 				kupacAdresa.setText(kupac.getAdresa());
 				kupacMjesto.setText(kupac.getMjesto());

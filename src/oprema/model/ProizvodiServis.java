@@ -114,20 +114,32 @@ public class ProizvodiServis {
 		vratiSesiju();
 		return svi;
 	}
-	public Kupac poPIBu(int pib){
+	public Kupac poPIBu(String pib){
 		Kupac rez=getSession().get(Kupac.class, pib);
 		vratiSesiju();
 		return rez;
 	}
 
-	public void izbrisiKupca(int pib){
+	public void izbrisiKupca(String pib){
 		getSession().delete(getSession().get(Kupac.class, pib));
 		vratiSesiju();
 	}
 
-	public void unesiKupca(Kupac k){
-		getSession().merge(k);
+	public void apdejtujKupca(Kupac k){
+		getSession().saveOrUpdate(k);
 		vratiSesiju();
+	}
+
+	public List<Kupac> poPibuLike(String pib){
+		List<Kupac> rez=getSession().createCriteria(Kupac.class).add(Restrictions.like("pib", pib, MatchMode.ANYWHERE)).list();
+		vratiSesiju();
+		return rez;
+	}
+
+	public List<Kupac> poNazivuLike(String naziv){
+		List<Kupac> rez=getSession().createCriteria(Kupac.class).add(Restrictions.like("naziv", naziv, MatchMode.START).ignoreCase()).list();
+		vratiSesiju();
+		return rez;
 	}
 
 }

@@ -106,7 +106,7 @@ public class Test {
 		njen.setKolicina(1);
 		sesija.save(njen);
 		Kupac k=new Kupac();
-		k.setPib(12345678);
+		k.setPib("12345678");
 		k.setMjesto("Beograd");
 		k.setAdresa("Golubinačka 5");
 		k.setNaziv("Neki naziv");

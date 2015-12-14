@@ -30,6 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import oprema.model.Kupac;
 import oprema.model.Proizvodi;
 import oprema.model.ProizvodiServis;
 
@@ -77,7 +78,7 @@ public class BazaP extends Stage{
     private TextField dodajPIBK;
 
     @FXML
-    private TableView<?> tabelaK;
+    private TableView<Kupac> tabelaK;
 
     @FXML
     private TextField dodajMjestoK;
@@ -184,17 +185,33 @@ public class BazaP extends Stage{
 
     @FXML
     void traziPIBKAkcija(ActionEvent event) {
-
+    	List<Kupac> rez=ps.poPibuLike(traziPIBK.getText());
+    	tabelaK.setItems(FXCollections.observableArrayList(rez));
+    	tabelaK.refresh();
     }
 
     @FXML
     void traziNazivKAkcija(ActionEvent event) {
-
+    	List<Kupac> rez=ps.poNazivuLike(traziNazivK.getText());
+    	tabelaK.setItems(FXCollections.observableArrayList(rez));
+    	tabelaK.refresh();
     }
 
     @FXML
     void unesiKupcaAkcija(ActionEvent event) {
-
+    	Kupac k=new Kupac();
+    	if(dodajPIBK.getText().length()==0){
+    		up.setPoruka("Nije upisan PIB za novog kupca");
+    		up.prikazi();
+    		return;
+    	}
+    	k.setPib(dodajPIBK.getText());
+    	k.setNaziv(dodajNazivK.getText());
+    	k.setAdresa(dodajAdresaK.getText());
+    	k.setMjesto(dodajMjestoK.getText());
+    	ps.apdejtujKupca(k);
+    	tabelaK.getItems().add(k);
+    	tabelaK.refresh();
     }
 
     @FXML
@@ -219,10 +236,103 @@ public class BazaP extends Stage{
         assert dodajAdresaK != null : "fx:id=\"dodajAdresaK\" was not injected: check your FXML file 'PregledBaza.fxml'.";
         assert dodajPDVP != null : "fx:id=\"dodajPDVP\" was not injected: check your FXML file 'PregledBaza.fxml'.";
         napraviTabeluProizvoda();
-//        napraviTabeluKupaca();
+        napraviTabeluKupaca();
     }
 
-    private void napraviTabeluProizvoda() {
+    private void napraviTabeluKupaca() {
+		TableColumn<Kupac, String> pibKol=new TableColumn<Kupac, String>("PIB");
+		TableColumn<Kupac, String> nazivKol=new TableColumn<Kupac, String>("Naziv");
+		TableColumn<Kupac, String> adresaKol=new TableColumn<Kupac, String>("Adresa");
+		TableColumn<Kupac, String> mjestoKol=new TableColumn<Kupac, String>("Mesto");
+
+		pibKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Kupac,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Kupac, String> param) {
+				SimpleStringProperty sp=new SimpleStringProperty(param.getValue().getPib());
+				return sp;
+			}
+		});
+
+		pibKol.setCellFactory(TextFieldTableCell.forTableColumn());
+		pibKol.setEditable(false);
+
+		nazivKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Kupac,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Kupac, String> param) {
+				SimpleStringProperty sp=new SimpleStringProperty(param.getValue().getNaziv());
+				sp.addListener(new ChangeListener<String>() {
+
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						param.getValue().setNaziv(newValue);
+						ps.apdejtujKupca(param.getValue());
+						tabelaK.refresh();
+					}
+				});
+				return sp;
+			}
+		});
+
+		nazivKol.setCellFactory(TextFieldTableCell.forTableColumn());
+		nazivKol.setEditable(true);
+
+
+		adresaKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Kupac,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Kupac, String> param) {
+				SimpleStringProperty sp=new SimpleStringProperty(param.getValue().getAdresa());
+				sp.addListener(new ChangeListener<String>() {
+
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						param.getValue().setAdresa(newValue);
+						ps.apdejtujKupca(param.getValue());
+						tabelaK.refresh();
+					}
+				});
+				return sp;
+			}
+		});
+
+		adresaKol.setCellFactory(TextFieldTableCell.forTableColumn());
+		adresaKol.setEditable(true);
+
+		mjestoKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Kupac,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Kupac, String> param) {
+				SimpleStringProperty sp=new SimpleStringProperty(param.getValue().getMjesto());
+				sp.addListener(new ChangeListener<String>() {
+
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						param.getValue().setMjesto(newValue);
+						ps.apdejtujKupca(param.getValue());
+					}
+				});
+				return sp;
+			}
+		});
+		mjestoKol.setCellFactory(TextFieldTableCell.forTableColumn());
+		mjestoKol.setEditable(true);
+
+
+		tabelaK.getSelectionModel().setCellSelectionEnabled(true);
+		tabelaK.setEditable(true);
+
+		tabelaK.getColumns().addAll(pibKol, nazivKol, adresaKol, mjestoKol);
+
+		tabelaK.getItems().addAll(ps.sviKupci());
+
+	}
+
+	private void napraviTabeluProizvoda() {
 		TableColumn<Proizvodi, String> sifraK=new TableColumn<>("Šifra proizvoda");
 		TableColumn<Proizvodi, String> nazivK=new TableColumn<>("Naziv proizvoda");
 		TableColumn<Proizvodi, Number> cenaK=new TableColumn<>("Cena");

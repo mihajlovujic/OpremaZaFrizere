@@ -13,7 +13,7 @@ public class Kupac {
 	@Column
 	private String mjesto;
 	@Id
-	private int pib;
+	private String pib;
 
 
 	public Kupac()
@@ -52,14 +52,16 @@ public class Kupac {
 	}
 
 
-	public int getPib() {
+	public String getPib() {
 		return pib;
 	}
 
 
-	public void setPib(int pib) {
+	public void setPib(String pib) {
 		this.pib = pib;
 	}
+
+
 
 
 

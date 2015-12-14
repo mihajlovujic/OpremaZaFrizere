@@ -340,7 +340,6 @@ public class Program extends Application {
 
 					@Override
 					public void handle(WindowEvent event) {
-						System.out.println("Handlujem");
 						if(kup.getKupac()!=null){
 							kupacPIB.setText(kup.getKupac().getPib()+"");
 							kupacAdresa.setText(kup.getKupac().getAdresa());

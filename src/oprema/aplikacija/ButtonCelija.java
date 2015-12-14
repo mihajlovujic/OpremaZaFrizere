@@ -18,7 +18,6 @@ public class ButtonCelija extends TableCell<Proizvodi, Boolean> {
 
 			@Override
 			public void handle(KeyEvent event) {
-				System.out.println("Uslo u hendler"+event.getCode());
 				if(event.getCode().equals(KeyCode.ENTER))
 					dugme.fire();
 			}
