@@ -11,7 +11,7 @@ import javax.transaction.NotSupportedException;
 
 @Entity
 public class Proizvodi {
-
+	public static int koeficijentCuvanja=1000;
 
 	@Id
 	private String sifra;
@@ -43,6 +43,9 @@ public class Proizvodi {
 	@Transient
 	private int pozajmicaIzVelikog=0;
 
+	@Transient
+	private boolean usluge=false;
+
 	public Proizvodi(){
 
 	}
@@ -70,11 +73,11 @@ public class Proizvodi {
 	}
 
 	public double getCijenaDb(){
-		return cijena/(100.00);
+		return cijena/(koeficijentCuvanja+0.0);
 	}
 
 	public void setCijena(double cijena) {
-		this.cijena = (int) Math.round(cijena*100);
+		this.cijena = (int) Math.round(cijena*koeficijentCuvanja);
 		postaviSve();
 	}
 
@@ -132,7 +135,7 @@ public class Proizvodi {
 	}
 
 	public double getCijenaSaRabatomDb(){
-		return cijenaSaRabatom/100.00;
+		return cijenaSaRabatom/(koeficijentCuvanja+0.0);
 	}
 
 	public int getCijenaPDV() {
@@ -140,7 +143,7 @@ public class Proizvodi {
 	}
 
 	public double getCijenaPDVDb(){
-		return cijenaPDV/100.00;
+		return cijenaPDV/(koeficijentCuvanja+0.0);
 	}
 
 	public int getCijenaUkupno() {
@@ -148,18 +151,18 @@ public class Proizvodi {
 	}
 
 	public double getCijenaUkupnoDb(){
-		return cijenaUkupno/100.00;
+		return cijenaUkupno/(koeficijentCuvanja+0.0);
 	}
 
 
 	private void postaviSaRabatom(){
-		cijenaSaRabatom=(int) Math.round(cijena/(rabat/(100+0.0))*kolicina);
+		cijenaSaRabatom=(int) Math.round(cijena/(rabat/100.00)*kolicina);
 	}
 
 	private void postaviPDV(){
 		//Napisi funkciju koja izracunava kolicinu pdv-a u odnosu na njegov procenat i ukupnu cijenu sa rabatom
 		//vidi iz onog racuna kako se racunaju cijena sa rabatom i kolicina pdv-a
-		cijenaPDV=(int) Math.round(cijenaSaRabatom*(pdv/(100+0.0)));
+		cijenaPDV=(int) Math.round(cijenaSaRabatom*(pdv/(100.00)));
 	}
 
 	private void postaviUkupno(){
@@ -171,6 +174,14 @@ public class Proizvodi {
 		postaviPDV();
 		postaviUkupno();
 	}
+	public boolean isUsluge() {
+		return usluge;
+	}
+
+	public void setUsluge(boolean usluge) {
+		this.usluge = usluge;
+	}
+
 	@Override
 	public String toString() {
 		return "Proizvodi [sifra=" + sifra + ", naziv=" + naziv + ", cijena=" + cijena + ", pdv=" + pdv + ", rabat="

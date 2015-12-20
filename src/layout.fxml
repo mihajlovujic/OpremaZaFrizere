@@ -7,25 +7,6 @@
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
       <GridPane hgap="10.0" vgap="5.0" VBox.vgrow="NEVER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -86,6 +67,7 @@
             <Label text="U velikom magacinu" />
             <TextField fx:id="velikiMagacin" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" prefColumnCount="6" />
             <Button fx:id="dodaj" mnemonicParsing="false" text="Dodaj u račun" />
+            <Button mnemonicParsing="false" onAction="#isprazniListu" text="Obriši proizvode" />
          </children>
       </HBox>
       <TableView fx:id="tabela" prefHeight="282.0" prefWidth="931.0" />

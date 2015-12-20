@@ -679,7 +679,7 @@ public class BazaP extends Stage{
 
 	public void prikazi(){
     	this.centerOnScreen();
-    	this.sizeToScene();
+    	this.setMaximized(true);
     	this.show();
     }
 }

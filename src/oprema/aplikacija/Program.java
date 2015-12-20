@@ -1,5 +1,7 @@
 package oprema.aplikacija;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -7,6 +9,7 @@ import javax.transaction.NotSupportedException;
 
 import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 
+import exelProba.Proba;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -28,6 +31,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -36,10 +40,13 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import oprema.model.Kupac;
 import oprema.model.Obracun;
 import oprema.model.Proizvodi;
 import oprema.model.ProizvodiServis;
@@ -51,6 +58,8 @@ public class Program extends Application {
 	Obracun obracun=new Obracun();
 	BazaP  bazaProzor;
 	KupacP kup;
+	Kupac izabraniK;
+	Stage glavniProzor;
 
 	@FXML
 	private ResourceBundle resources;
@@ -138,7 +147,7 @@ public class Program extends Application {
 		Scene scena=new Scene(boxaca);
 		primaryStage.setScene(scena);
 		primaryStage.sizeToScene();
-
+		glavniProzor=primaryStage;
 		dodaj.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -169,7 +178,9 @@ public class Program extends Application {
 				System.exit(0);
 			}
 		});
+		primaryStage.setTitle("Messina");
 		primaryStage.show();
+		primaryStage.setMaximized(true);
 	}
 
 
@@ -282,9 +293,6 @@ public class Program extends Application {
 				up.prikazi();
 			}
 		}
-		else if(tf==naziv){
-			unos.setNaziv(naziv.getText());
-		}
 		else if(tf==sifra){
 			if(!popuniProizvodZaUnos())
 				return;
@@ -294,45 +302,96 @@ public class Program extends Application {
 		}
 	}
 
-	@FXML
-    void initialize() {
-        assert generisiRacun != null : "fx:id=\"generisiRacun\" was not injected: check your FXML file 'layout.fxml'.";
-        assert ukupnoG != null : "fx:id=\"ukupnoG\" was not injected: check your FXML file 'layout.fxml'.";
-        assert pdv != null : "fx:id=\"pdv\" was not injected: check your FXML file 'layout.fxml'.";
-        assert maliMagacin != null : "fx:id=\"maliMagacin\" was not injected: check your FXML file 'layout.fxml'.";
-        assert ukupnoC != null : "fx:id=\"ukupnoC\" was not injected: check your FXML file 'layout.fxml'.";
-        assert naziv != null : "fx:id=\"naziv\" was not injected: check your FXML file 'layout.fxml'.";
-        assert napraviKupca != null : "fx:id=\"napraviKupca\" was not injected: check your FXML file 'layout.fxml'.";
-        assert kolicina != null : "fx:id=\"kolicina\" was not injected: check your FXML file 'layout.fxml'.";
-        assert kupacNaziv != null : "fx:id=\"kupacNaziv\" was not injected: check your FXML file 'layout.fxml'.";
-        assert ukupnoPDV != null : "fx:id=\"ukupnoPDV\" was not injected: check your FXML file 'layout.fxml'.";
-        assert saRabatom != null : "fx:id=\"saRabatom\" was not injected: check your FXML file 'layout.fxml'.";
-        assert rabat != null : "fx:id=\"rabat\" was not injected: check your FXML file 'layout.fxml'.";
-        assert tabela != null : "fx:id=\"tabela\" was not injected: check your FXML file 'layout.fxml'.";
-        assert magaciniB != null : "fx:id=\"magaciniB\" was not injected: check your FXML file 'layout.fxml'.";
-        assert ukupno != null : "fx:id=\"ukupno\" was not injected: check your FXML file 'layout.fxml'.";
-        assert kupacMjesto != null : "fx:id=\"kupacMjesto\" was not injected: check your FXML file 'layout.fxml'.";
-        assert dodaj != null : "fx:id=\"dodaj\" was not injected: check your FXML file 'layout.fxml'.";
-        assert pdvUkupno != null : "fx:id=\"pdvUkupno\" was not injected: check your FXML file 'layout.fxml'.";
-        assert kupacAdresa != null : "fx:id=\"kupacAdresa\" was not injected: check your FXML file 'layout.fxml'.";
-        assert sifra != null : "fx:id=\"sifra\" was not injected: check your FXML file 'layout.fxml'.";
-        assert velikiMagacin != null : "fx:id=\"velikiMagacin\" was not injected: check your FXML file 'layout.fxml'.";
-        assert kupacPIB != null : "fx:id=\"kupacPIB\" was not injected: check your FXML file 'layout.fxml'.";
-        assert cijena != null : "fx:id=\"cijena\" was not injected: check your FXML file 'layout.fxml'.";
 
-        generisiRacun.setOnAction(new EventHandler<ActionEvent>() {
+	@FXML
+	void isprazniListu(ActionEvent event) {
+		if(tabela.getItems()!=null){
+			if(tabela.getItems().size()>0){
+				tabela.getItems().clear();
+				obracun.isprazni();
+				postaviZbirove(null);
+			}
+		}
+	}
+
+
+	@FXML
+	void initialize() {
+		assert generisiRacun != null : "fx:id=\"generisiRacun\" was not injected: check your FXML file 'layout.fxml'.";
+		assert ukupnoG != null : "fx:id=\"ukupnoG\" was not injected: check your FXML file 'layout.fxml'.";
+		assert pdv != null : "fx:id=\"pdv\" was not injected: check your FXML file 'layout.fxml'.";
+		assert maliMagacin != null : "fx:id=\"maliMagacin\" was not injected: check your FXML file 'layout.fxml'.";
+		assert ukupnoC != null : "fx:id=\"ukupnoC\" was not injected: check your FXML file 'layout.fxml'.";
+		assert naziv != null : "fx:id=\"naziv\" was not injected: check your FXML file 'layout.fxml'.";
+		assert napraviKupca != null : "fx:id=\"napraviKupca\" was not injected: check your FXML file 'layout.fxml'.";
+		assert kolicina != null : "fx:id=\"kolicina\" was not injected: check your FXML file 'layout.fxml'.";
+		assert kupacNaziv != null : "fx:id=\"kupacNaziv\" was not injected: check your FXML file 'layout.fxml'.";
+		assert ukupnoPDV != null : "fx:id=\"ukupnoPDV\" was not injected: check your FXML file 'layout.fxml'.";
+		assert saRabatom != null : "fx:id=\"saRabatom\" was not injected: check your FXML file 'layout.fxml'.";
+		assert rabat != null : "fx:id=\"rabat\" was not injected: check your FXML file 'layout.fxml'.";
+		assert tabela != null : "fx:id=\"tabela\" was not injected: check your FXML file 'layout.fxml'.";
+		assert magaciniB != null : "fx:id=\"magaciniB\" was not injected: check your FXML file 'layout.fxml'.";
+		assert ukupno != null : "fx:id=\"ukupno\" was not injected: check your FXML file 'layout.fxml'.";
+		assert kupacMjesto != null : "fx:id=\"kupacMjesto\" was not injected: check your FXML file 'layout.fxml'.";
+		assert dodaj != null : "fx:id=\"dodaj\" was not injected: check your FXML file 'layout.fxml'.";
+		assert pdvUkupno != null : "fx:id=\"pdvUkupno\" was not injected: check your FXML file 'layout.fxml'.";
+		assert kupacAdresa != null : "fx:id=\"kupacAdresa\" was not injected: check your FXML file 'layout.fxml'.";
+		assert sifra != null : "fx:id=\"sifra\" was not injected: check your FXML file 'layout.fxml'.";
+		assert velikiMagacin != null : "fx:id=\"velikiMagacin\" was not injected: check your FXML file 'layout.fxml'.";
+		assert kupacPIB != null : "fx:id=\"kupacPIB\" was not injected: check your FXML file 'layout.fxml'.";
+		assert cijena != null : "fx:id=\"cijena\" was not injected: check your FXML file 'layout.fxml'.";
+
+
+		generisiRacun.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				for(Proizvodi a : tabela.getItems()){
-					System.out.println(a);
+				if(tabela.getItems().size()==0){
+					up.setPoruka("Nema proizvoda za račun");
+					up.prikazi();
 				}
+				else if(izabraniK==null){
+					up.setPoruka("Nije izabran kupac");
+					up.prikazi();
+				}
+				else{
+					FileChooser fc=new FileChooser();
+					fc.setTitle("Izaberite lokaciju za čuvanje računa");
+					fc.setInitialDirectory(new File(System.getProperty("user.home")));
+					File f=fc.showSaveDialog(glavniProzor);
+					if(f!=null){
+						Proba gen=new Proba(tabela.getItems(), izabraniK, obracun, f);
+						try {
+							gen.generisi();
+						} catch (IOException e) {
+							up.setPoruka(e.getMessage());
+							up.prikazi();
+						}
+						up.setPoruka("Proizvodi za doneti iz velikog magacina: ");
+						boolean prikaz=false;
+						for(Proizvodi a : tabela.getItems()){
+							ps.apdejtuj(a);
+							if(a.getPozajmicaIzVelikog()>0){
+								if(!prikaz)
+									up.pripremiTekst();
+								prikaz=true;
+								String nadov=a.getSifra()+" : "+a.getNaziv()+"\t"+a.getPozajmicaIzVelikog();
+								up.dodajUArea(nadov);
+							}
+						}
+						if(prikaz){
+							up.prikazi(true);
+						}
+					}
+
+				}
+
 			}
 		});
-        napraviTabelu(tabela);
-        postaviZbirove(null);
+		napraviTabelu(tabela);
+		postaviZbirove(null);
 
-        napraviKupca.setOnAction(new EventHandler<ActionEvent>() {
+		napraviKupca.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
@@ -345,6 +404,7 @@ public class Program extends Application {
 							kupacAdresa.setText(kup.getKupac().getAdresa());
 							kupacMjesto.setText(kup.getKupac().getMjesto());
 							kupacNaziv.setText(kup.getKupac().getNaziv());
+							izabraniK=kup.getKupac();
 						}
 					}
 				});
@@ -353,7 +413,7 @@ public class Program extends Application {
 			}
 		});
 
-        magaciniB.setOnAction(new EventHandler<ActionEvent>() {
+		magaciniB.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
@@ -361,7 +421,7 @@ public class Program extends Application {
 
 			}
 		});
-    }
+	}
 
 	private void napraviTabelu(TableView<Proizvodi> tabela2) {
 		TableColumn<Proizvodi, String> sifraKol=new TableColumn<>("Šifra");
@@ -375,6 +435,7 @@ public class Program extends Application {
 		TableColumn<Proizvodi, Number> cenaRabKol=new TableColumn<>("Cena sa R");
 		TableColumn<Proizvodi, Number> cenaPDVKol=new TableColumn<>("PDV Cena");
 		TableColumn<Proizvodi, Number> ukupnoKol=new TableColumn<>("Ukupno");
+		TableColumn<Proizvodi, Boolean> uslugeKol=new TableColumn<Proizvodi, Boolean>("Usluge");
 		TableColumn<Proizvodi, Boolean> izbaci=new TableColumn<>("Izbaci");
 
 		nazivKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Proizvodi,String>, ObservableValue<String>>() {
@@ -894,40 +955,47 @@ public class Program extends Application {
 			}
 		});
 
-		TableColumn<Proizvodi, Integer> pozajmiceKol=new TableColumn<Proizvodi, Integer>();
-		pozajmiceKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Proizvodi,Integer>, ObservableValue<Integer>>() {
+		uslugeKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Proizvodi,Boolean>, ObservableValue<Boolean>>() {
 
 			@Override
-			public ObservableValue<Integer> call(CellDataFeatures<Proizvodi, Integer> param) {
-				SimpleIntegerProperty sp=new SimpleIntegerProperty(param.getValue().getPozajmicaIzVelikog());
-				return sp.asObject();
+			public ObservableValue<Boolean> call(CellDataFeatures<Proizvodi, Boolean> param) {
+				SimpleBooleanProperty sp=new SimpleBooleanProperty(param.getValue().isUsluge());
+				sp.addListener(new ChangeListener<Boolean>() {
+
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
+							Boolean newValue) {
+						param.getValue().setUsluge(newValue);
+					}
+				});
+				return sp;
 			}
 		});
-		pozajmiceKol.setCellFactory(new Callback<TableColumn<Proizvodi,Integer>, TableCell<Proizvodi,Integer>>() {
+		uslugeKol.setCellFactory(new Callback<TableColumn<Proizvodi,Boolean>, TableCell<Proizvodi,Boolean>>() {
 
 			@Override
-			public TableCell<Proizvodi, Integer> call(TableColumn<Proizvodi, Integer> param) {
-				// TODO Auto-generated method stub
-				return new TextFieldTableCell<>();
+			public TableCell<Proizvodi, Boolean> call(TableColumn<Proizvodi, Boolean> param) {
+				CheckBoxTableCell<Proizvodi, Boolean> celija=new CheckBoxTableCell<>();
+				return celija;
 			}
 		});
-		pozajmiceKol.setEditable(false);
-
-
+		uslugeKol.setEditable(true);
 
 		tabela2.setEditable(true);
 		tabela2.getSelectionModel().setCellSelectionEnabled(true);
-		tabela2.getColumns().addAll(sifraKol, nazivKol,kolicinaKol,cenaKol, rabatKol, cenaRabKol, pdvKol, cenaPDVKol, ukupnoKol, maliMKol, velikiMKol,pozajmiceKol, izbaci);
+		tabela2.getColumns().addAll(sifraKol, nazivKol,kolicinaKol,cenaKol, rabatKol, cenaRabKol, pdvKol, cenaPDVKol, ukupnoKol, maliMKol, velikiMKol, uslugeKol, izbaci);
 	}
 
 
 	public void postaviZbirove(Proizvodi unos2,boolean...bs){
 		tabela.refresh();
-		if(bs.length>0){
-			obracun.izbaci(unos2);
-		}
-		else{
-			obracun.stavi(unos2);
+		if(unos2!=null){
+			if(bs.length>0){
+				obracun.izbaci(unos2);
+			}
+			else{
+				obracun.stavi(unos2);
+			}
 		}
 		ukupnoG.setText(obracun.getGlavnicaUDb()+"");
 		ukupnoPDV.setText(obracun.getPdvUDb()+"");

@@ -43,17 +43,24 @@ public class Obracun {
 		return proizvodi.get(p.getSifra())!=null;
 	}
 	public double getGlavnicaUDb() {
-		return glavnicaU/100.00;
+		return glavnicaU/(Proizvodi.koeficijentCuvanja+0.0);
 	}
 
 
 	public double getPdvUDb() {
-		return pdvU/100.00;
+		return pdvU/(Proizvodi.koeficijentCuvanja+0.0);
 	}
 
 
 	public double getUkupnoSve() {
-		return ukupnoSve/100.00;
+		return ukupnoSve/(Proizvodi.koeficijentCuvanja+0.0);
+	}
+
+	public void isprazni() {
+		proizvodi.clear();
+		glavnicaU=0;
+		pdvU=0;
+		ukupnoSve=0;
 	}
 
 
