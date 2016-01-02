@@ -75,7 +75,7 @@
             </VBox>
         </content>
       </Tab>
-      <Tab text="Kupci">
+      <Tab closable="false" text="Kupci">
         <content>
             <VBox alignment="CENTER" spacing="10.0">
                <children>

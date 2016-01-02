@@ -33,6 +33,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -179,6 +180,7 @@ public class Program extends Application {
 			}
 		});
 		primaryStage.setTitle("Messina");
+		primaryStage.getIcons().add(new Image(this.getClass().getClassLoader().getResourceAsStream("ikona.png")));
 		primaryStage.show();
 		primaryStage.setMaximized(true);
 	}
@@ -966,6 +968,7 @@ public class Program extends Application {
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
 							Boolean newValue) {
 						param.getValue().setUsluge(newValue);
+						param.getTableView().refresh();
 					}
 				});
 				return sp;

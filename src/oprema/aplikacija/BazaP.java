@@ -680,6 +680,8 @@ public class BazaP extends Stage{
 	public void prikazi(){
     	this.centerOnScreen();
     	this.setMaximized(true);
+    	tabelaP.setItems(FXCollections.observableArrayList(ps.sviProizvodi()));
+    	tabelaK.setItems(FXCollections.observableArrayList(ps.sviKupci()));
     	this.show();
     }
 }

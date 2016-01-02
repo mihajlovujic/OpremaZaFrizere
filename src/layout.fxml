@@ -70,7 +70,7 @@
             <Button mnemonicParsing="false" onAction="#isprazniListu" text="Obriši proizvode" />
          </children>
       </HBox>
-      <TableView fx:id="tabela" prefHeight="282.0" prefWidth="931.0" />
+      <TableView fx:id="tabela" prefHeight="282.0" prefWidth="931.0" VBox.vgrow="ALWAYS" />
       <HBox prefHeight="151.0" prefWidth="931.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">

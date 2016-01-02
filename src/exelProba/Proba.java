@@ -92,7 +92,13 @@ public class Proba {
 		for(int i=0;i<11;i++){
 			sh.autoSizeColumn(i);
 		}
-		FileOutputStream fs=new FileOutputStream(fajl);
+		File rez;
+		if(!fajl.getName().contains(".xls"))
+			rez=new File(fajl.getAbsolutePath()+".xls");
+		else
+			rez=fajl;
+
+		FileOutputStream fs=new FileOutputStream(rez);
 		wb.write(fs);
 		fs.flush();
 		fs.close();
@@ -149,11 +155,16 @@ public class Proba {
 			celija.setCellValue(tabela[0].getCell(i).getStringCellValue());
 			celija.setCellStyle(tabela[0].getCell(i).getCellStyle());
 		}
-		prviRed++;//30
+		int upisano=0;
 		for(int i=0;i<lista.size();i++){
-			red=sh.createRow(prviRed+i);
 			Proizvodi tren=lista.get(i);
-			String[] upisati={(i+1)+"",tren.getSifra(), tren.getNaziv(),"kom",tren.getKolicina()+"",tren.getCijenaDb()+"",tren.getRabat()+"%",tren.getCijenaSaRabatomDb()+"",tren.getPdv()+"%",tren.getCijenaUkupnoDb()+""};
+			if(tren.isUsluge())
+				continue;
+			upisano++;
+			red=sh.createRow(prviRed+upisano);
+
+
+			String[] upisati={(upisano)+"",tren.getSifra(), tren.getNaziv(),"kom",tren.getKolicina()+"",tren.getCijenaDb()+"",tren.getRabat()+"%",tren.getCijenaSaRabatomDb()+"",tren.getPdv()+"%",tren.getCijenaUkupnoDb()+""};
 			for(int j=0;j<10;j++){
 				System.out.print(upisati[j]+"\t");
 				Cell cel=red.createCell(j);
@@ -168,7 +179,25 @@ public class Proba {
 			}
 			System.out.print("\n");
 		}
-
+		double cijena=0;
+		for(Proizvodi p : lista){
+			if(p.isUsluge())
+				cijena+=p.getCijenaDb()*p.getKolicina();
+		}
+		upisano++;
+		String[] upisati2={(upisano)+"","TC1SUSLUGE","Usluge","kom",1+"",cijena+"","",cijena+"","20%",cijena*1.2+""};
+		Row redUsluge=sh.createRow(prviRed+upisano);
+		for(int j=0;j<10;j++){
+			Cell cel=redUsluge.createCell(j);
+			if(j==0 || (j>3 && j!=6 && j!=8)){
+				cel.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+				cel.setCellValue(Double.parseDouble(upisati2[j]));
+			}
+			else
+				cel.setCellValue(upisati2[j]);
+			tabela[1].getCell(j).getCellStyle().setBorderBottom(HSSFCellStyle.BORDER_THIN);
+			cel.setCellStyle(tabela[1].getCell(j).getCellStyle());
+		}
 	}
 
 	public void upisiKupca(Sheet sh, Kupac kupac){
