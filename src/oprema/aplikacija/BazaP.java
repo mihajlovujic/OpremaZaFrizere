@@ -26,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -48,6 +49,9 @@ public class BazaP extends Stage{
 
 		loader.setController(this);
 		this.setScene(new Scene(loader.load()));
+		this.setTitle("Messina Magacin");
+		this.getIcons().add(new Image(this.getClass().getClassLoader().getResourceAsStream("ikona.png")));
+
 	}
 
     @FXML

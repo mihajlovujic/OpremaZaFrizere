@@ -60,6 +60,7 @@ public class KupacP extends Stage implements EventHandler<ActionEvent>{
 		Scene scena=new Scene(loader.load());
 
 		this.setScene(scena);
+		this.setTitle("Unos kupca za račun");
 		this.sizeToScene();
 
 	}
