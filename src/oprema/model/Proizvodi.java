@@ -11,7 +11,7 @@ import javax.transaction.NotSupportedException;
 
 @Entity
 public class Proizvodi {
-	public static int koeficijentCuvanja=1000;
+	public static int koeficijentCuvanja=100;
 
 	@Id
 	private String sifra;
@@ -156,7 +156,7 @@ public class Proizvodi {
 
 
 	private void postaviSaRabatom(){
-		cijenaSaRabatom=(int) Math.round(cijena/(rabat/100.00)*kolicina);
+		cijenaSaRabatom=(int) Math.round((cijena-((rabat/100.00)*cijena))*kolicina);
 	}
 
 	private void postaviPDV(){

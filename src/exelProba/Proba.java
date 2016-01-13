@@ -55,7 +55,12 @@ public class Proba {
 	}
 
 	public void generisi() throws IOException {
-
+		try {
+			Thread.sleep(8000l);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		InputStream is=Proba.class.getClassLoader().getResourceAsStream("racun 01-M-2015 boza 2.xls");
 		Workbook wb=new HSSFWorkbook(is);
 		Sheet sh=wb.getSheetAt(0);

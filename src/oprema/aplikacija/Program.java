@@ -364,7 +364,9 @@ public class Program extends Application {
 					if(f!=null){
 						Proba gen=new Proba(tabela.getItems(), izabraniK, obracun, f);
 						try {
+							LoaderWindow ld=new LoaderWindow();
 							gen.generisi();
+							ld.close();
 						} catch (IOException e) {
 							up.setPoruka(e.getMessage());
 							up.prikazi();
@@ -968,7 +970,7 @@ public class Program extends Application {
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
 							Boolean newValue) {
 						param.getValue().setUsluge(newValue);
-						param.getTableView().refresh();
+						postaviZbirove(param.getValue());
 					}
 				});
 				return sp;
