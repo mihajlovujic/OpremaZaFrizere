@@ -184,27 +184,28 @@ public class Proba {
 			}
 			System.out.print("\n");
 		}
-		double cijena=0;
 		for(Proizvodi p : lista){
-			if(p.isUsluge())
-				cijena+=p.getCijenaDb()*p.getKolicina();
-		}
-		upisano++;
-		String[] upisati2={(upisano)+"","TC1SUSLUGE","Usluge","kom",1+"",cijena+"","",cijena+"","20%",cijena*1.2+""};
-		if(cijena>0){
-			Row redUsluge=sh.createRow(prviRed+upisano);
-			for(int j=0;j<10;j++){
-				Cell cel=redUsluge.createCell(j);
-				if(j==0 || (j>3 && j!=6 && j!=8)){
-					cel.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-					cel.setCellValue(Double.parseDouble(upisati2[j]));
+			if(p.isUsluge()){
+				upisano++;
+				String[] upisati2={(upisano)+"","TC1SUSLUGE","Usluge","kom",1+"",p.getCijenaDb()+"",p.getRabat()+"%",p.getCijenaSaRabatomDb()+"","20%",p.getCijenaUkupnoDb()+""};
+
+				Row redUsluge=sh.createRow(prviRed+upisano);
+				for(int j=0;j<10;j++){
+					Cell cel=redUsluge.createCell(j);
+					if(j==0 || (j>3 && j!=6 && j!=8)){
+						cel.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+						cel.setCellValue(Double.parseDouble(upisati2[j]));
+					}
+					else
+						cel.setCellValue(upisati2[j]);
+					tabela[1].getCell(j).getCellStyle().setBorderBottom(HSSFCellStyle.BORDER_THIN);
+					cel.setCellStyle(tabela[1].getCell(j).getCellStyle());
+
 				}
-				else
-					cel.setCellValue(upisati2[j]);
-				tabela[1].getCell(j).getCellStyle().setBorderBottom(HSSFCellStyle.BORDER_THIN);
-				cel.setCellStyle(tabela[1].getCell(j).getCellStyle());
 			}
+
 		}
+
 	}
 
 	public void upisiKupca(Sheet sh, Kupac kupac){

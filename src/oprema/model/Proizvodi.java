@@ -180,7 +180,7 @@ public class Proizvodi {
 
 	public void setUsluge(boolean usluge) {
 		this.usluge = usluge;
-		this.rabat=100;
+		this.rabat=0;
 		this.pdv=20;
 		postaviSve();
 	}

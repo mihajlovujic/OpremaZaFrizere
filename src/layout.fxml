@@ -20,7 +20,7 @@
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Šifra proizvoda" wrapText="true" GridPane.columnIndex="0" />
             <TextField fx:id="sifra" alignment="CENTER" onAction="#dajFokus" prefColumnCount="30" GridPane.columnIndex="0" GridPane.rowIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="1.7976931348623157E308" text="Naziv proizvoda" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" />
-            <TextField fx:id="naziv" alignment="CENTER" editable="false" focusTraversable="false" onAction="#dajFokus" prefColumnCount="30" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="naziv" editable="true" maxWidth="1.7976931348623157E308" promptText="Naziv proizvoda" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
          </children>
          <padding>
             <Insets left="15.0" right="15.0" top="15.0" />

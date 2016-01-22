@@ -3,6 +3,7 @@ package oprema.aplikacija;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.transaction.NotSupportedException;
@@ -12,20 +13,26 @@ import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 import exelProba.Proba;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -66,9 +73,6 @@ public class Program extends Application {
 	private ResourceBundle resources;
 
 	@FXML
-	private URL location;
-
-	@FXML
 	private Button generisiRacun;
 
 	@FXML
@@ -84,7 +88,7 @@ public class Program extends Application {
 	private TextField ukupnoC;
 
 	@FXML
-	private TextField naziv;
+	private ComboBox<String> naziv;
 
 	@FXML
 	private Button napraviKupca;
@@ -221,10 +225,25 @@ public class Program extends Application {
 		return true;
 	}
 
+	public boolean popuniPoNazivuZaUnos(String prenos){
+		String sifraNaziv=prenos.substring(prenos.indexOf("(")+1, prenos.length()-1);
+		System.out.println("Sifra: "+sifraNaziv);
+		unos=ps.getProizvodPoSifri(sifraNaziv);
+		if(unos==null){
+			up.setPoruka("Ne postoji proizvod sa traženom šifrom u bazi");
+			up.prikazi();
+			postaviPolja();
+			return false;
+		}
+		postaviPolja();
+		return true;
+	}
+
+
 	public  void postaviPolja(){
 		if(unos==null){
 			sifra.setText("");
-			naziv.setText("");
+			naziv.setValue("");
 			kolicina.setText("");
 			cijena.setText("");
 			rabat.setText("");
@@ -236,7 +255,8 @@ public class Program extends Application {
 			velikiMagacin.setText("");
 			return;
 		}
-		naziv.setText(unos.getNaziv());
+		sifra.setText(unos.getSifra());
+		naziv.setValue(unos.getNaziv());
 		kolicina.setText(unos.getKolicina()+"");
 		cijena.setText(unos.getCijenaDb()+"");
 		rabat.setText(unos.getRabat()+"");
@@ -348,6 +368,7 @@ public class Program extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
+
 				if(tabela.getItems().size()==0){
 					up.setPoruka("Nema proizvoda za račun");
 					up.prikazi();
@@ -363,29 +384,36 @@ public class Program extends Application {
 					File f=fc.showSaveDialog(glavniProzor);
 					if(f!=null){
 						Proba gen=new Proba(tabela.getItems(), izabraniK, obracun, f);
-						try {
-							LoaderWindow ld=new LoaderWindow();
-							gen.generisi();
-							ld.close();
-						} catch (IOException e) {
-							up.setPoruka(e.getMessage());
-							up.prikazi();
-						}
-						up.setPoruka("Proizvodi za doneti iz velikog magacina: ");
-						boolean prikaz=false;
-						for(Proizvodi a : tabela.getItems()){
-							ps.apdejtuj(a);
-							if(a.getPozajmicaIzVelikog()>0){
-								if(!prikaz)
-									up.pripremiTekst();
-								prikaz=true;
-								String nadov=a.getSifra()+" : "+a.getNaziv()+"\t"+a.getPozajmicaIzVelikog();
-								up.dodajUArea(nadov);
+						Platform.runLater(()->{
+
+							LoaderWindow ld;
+							try {
+								ld = new LoaderWindow(gen);
+								ld.odradi();
+								ld.close();
+
+								up.setPoruka("Proizvodi za doneti iz velikog magacina: ");
+								boolean prikaz=false;
+								for(Proizvodi a : tabela.getItems()){
+									ps.apdejtuj(a);
+									if(a.getPozajmicaIzVelikog()>0){
+										if(!prikaz)
+											up.pripremiTekst();
+										prikaz=true;
+										String nadov=a.getSifra()+" : "+a.getNaziv()+"\t"+a.getPozajmicaIzVelikog();
+										up.dodajUArea(nadov);
+									}
+								}
+								if(prikaz){
+									up.prikazi(true);
+								}
+							} catch (Exception e) {
+								up.setPoruka(e.getMessage());
+								up.prikazi();
 							}
-						}
-						if(prikaz){
-							up.prikazi(true);
-						}
+
+						});
+
 					}
 
 				}
@@ -425,6 +453,44 @@ public class Program extends Application {
 
 			}
 		});
+		naziv.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode().equals(KeyCode.ENTER)){
+					if(!naziv.isShowing())
+						Platform.runLater(()->{naziv.show();});
+				}
+			}
+		});
+		Parent strijelica=(Parent) naziv.lookup(".arrow-button");
+		if(strijelica!=null)
+			strijelica.setStyle("visibility: 'hidden'");
+		naziv.showingProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if(!newValue){
+					if(!naziv.getSelectionModel().isEmpty()){
+						String izbor=naziv.getValue();
+						naziv.getSelectionModel().clearSelection();
+						naziv.getItems().clear();
+						popuniPoNazivuZaUnos(izbor);
+						kolicina.requestFocus();
+					}
+				}
+				else{
+					naziv.getItems().clear();
+					List<Proizvodi> pro=ps.getProizvodNazivLike(naziv.getValue());
+					System.out.println("Size: "+pro.size());
+					for(Proizvodi p : pro){
+						naziv.getItems().add(p.getNaziv()+"("+p.getSifra()+")");
+					}
+
+				}
+			}
+		});
+
 	}
 
 	private void napraviTabelu(TableView<Proizvodi> tabela2) {
@@ -964,11 +1030,19 @@ public class Program extends Application {
 			@Override
 			public ObservableValue<Boolean> call(CellDataFeatures<Proizvodi, Boolean> param) {
 				SimpleBooleanProperty sp=new SimpleBooleanProperty(param.getValue().isUsluge());
+
 				sp.addListener(new ChangeListener<Boolean>() {
 
 					@Override
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
 							Boolean newValue) {
+						for(Proizvodi p : param.getTableView().getItems()){
+							if(p.getSifra()!=param.getValue().getSifra() && p.isUsluge()){
+								param.getValue().setUsluge(false);
+								param.getTableView().refresh();
+								return;
+							}
+						}
 						param.getValue().setUsluge(newValue);
 						postaviZbirove(param.getValue());
 					}
