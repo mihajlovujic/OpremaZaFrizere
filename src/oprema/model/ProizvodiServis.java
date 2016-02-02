@@ -141,5 +141,23 @@ public class ProizvodiServis {
 		vratiSesiju();
 		return rez;
 	}
+	public void apdejtujKolicine(Proizvodi a) {
+		Proizvodi trazeni=(Proizvodi)getSession().get(Proizvodi.class, a.getSifra());
+		if(trazeni==null){
+			vratiSesiju();
+			return;
+		}
+		/*trazeni.setCijena(p.getCijenaDb());
+		trazeni.setRabat(p.getRabat());
+		trazeni.setPdv(p.getPdv());
+		trazeni.setMaliStanje(p.getMaliStanje());
+		trazeni.setVelikiStanje(p.getVelikiStanje());
+		trazeni.setNaziv(p.getNaziv());
+		getSession().save(trazeni);*/
+		trazeni.setMaliStanje(a.getMaliStanje());
+		trazeni.setVelikiStanje(a.getVelikiStanje());
+		getSession().save(trazeni);
+		vratiSesiju();
+	}
 
 }

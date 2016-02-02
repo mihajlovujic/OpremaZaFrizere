@@ -395,7 +395,7 @@ public class Program extends Application {
 								up.setPoruka("Proizvodi za doneti iz velikog magacina: ");
 								boolean prikaz=false;
 								for(Proizvodi a : tabela.getItems()){
-									ps.apdejtuj(a);
+									ps.apdejtujKolicine(a);
 									if(a.getPozajmicaIzVelikog()>0){
 										if(!prikaz)
 											up.pripremiTekst();
