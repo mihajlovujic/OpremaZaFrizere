@@ -187,7 +187,7 @@ public class Proba {
 		for(Proizvodi p : lista){
 			if(p.isUsluge()){
 				upisano++;
-				String[] upisati2={(upisano)+"","TC1SUSLUGE","Usluge","kom",1+"",p.getCijenaDb()+"",p.getRabat()+"%",p.getCijenaSaRabatomDb()+"","20%",p.getCijenaUkupnoDb()+""};
+				String[] upisati2={(upisano)+"","TC1SUSLUGE","Usluge","kom",1+"",p.getCijenaDb()+"",p.getRabat()+"%",p.getCijenaSaRabatomDb()+"",p.getPdv()+"%",p.getCijenaUkupnoDb()+""};
 
 				Row redUsluge=sh.createRow(prviRed+upisano);
 				for(int j=0;j<10;j++){

@@ -68,6 +68,7 @@
             <TextField fx:id="velikiMagacin" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" prefColumnCount="6" />
             <Button fx:id="dodaj" mnemonicParsing="false" text="Dodaj u račun" />
             <Button mnemonicParsing="false" onAction="#isprazniListu" text="Obriši proizvode" />
+            <Button fx:id="prethodniRacuni" mnemonicParsing="false" text="Prethodni računi" />
          </children>
       </HBox>
       <TableView fx:id="tabela" prefHeight="282.0" prefWidth="931.0" VBox.vgrow="ALWAYS" />

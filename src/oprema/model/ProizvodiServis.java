@@ -12,7 +12,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 public class ProizvodiServis {
-
+	public static String putanjaDoPodataka=System.getProperty("user.home")+File.separator+"Mesina"+File.separator;
 	private SessionFactory sf;
 	private Session s;
 
@@ -20,8 +20,7 @@ public class ProizvodiServis {
 		Configuration conf = new Configuration();
 		conf.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 		conf.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
-		File tren=new File(".");
-		String putanja=tren.getAbsoluteFile().getParent()+File.separator+"opremaDB";
+		String putanja=putanjaDoPodataka+"opremaDB";
 		conf.setProperty("hibernate.connection.url", "jdbc:h2:"+putanja);
 		conf.setProperty("hibernate.connection.username", "ognjen");
 		conf.setProperty("hibernate.connection.password", "");
@@ -110,7 +109,7 @@ public class ProizvodiServis {
 	}
 
 	public List<Kupac> sviKupci(){
-		List<Kupac> svi=getSession().createCriteria(Kupac.class).list();
+		List<Kupac> svi=getSession().createQuery("select k from Kupac k").list();
 		vratiSesiju();
 		return svi;
 	}

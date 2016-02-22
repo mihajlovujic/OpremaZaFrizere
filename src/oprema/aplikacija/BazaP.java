@@ -1,10 +1,12 @@
 package oprema.aplikacija;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import exelProba.MagacinPrinter;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -27,6 +29,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -185,6 +188,26 @@ public class BazaP extends Stage{
     	ps.apdejtuj(rez);
     	tabelaP.getItems().add(rez);
     	tabelaP.refresh();
+    	dodajSifraP.setText("");
+    	dodajNazivP.setText("");
+    	dodajCijenaP.setText("");
+    	dodajRabatP.setText("");
+    	dodajPDVP.setText("");
+    	dodajMaliMagacinP.setText("");
+    	dodajVelikiMagacinP.setText("");
+
+    }
+
+
+    @FXML
+    void generisiBazu(ActionEvent event) {
+    	FileChooser fc=new FileChooser();
+    	fc.setInitialDirectory(new File(System.getProperty("user.home")));
+    	File izabran = fc.showSaveDialog(unosP.getScene().getWindow());
+    	if(izabran != null){
+    		MagacinPrinter mp = new MagacinPrinter(ps);
+    		mp.isprintajMagacine(izabran.getAbsolutePath());
+    	}
     }
 
     @FXML
@@ -216,6 +239,10 @@ public class BazaP extends Stage{
     	ps.apdejtujKupca(k);
     	tabelaK.getItems().add(k);
     	tabelaK.refresh();
+    	dodajPIBK.setText("");
+    	dodajNazivK.setText("");
+    	dodajAdresaK.setText("");
+    	dodajMjestoK.setText("");
     }
 
     @FXML

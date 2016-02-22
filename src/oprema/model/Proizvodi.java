@@ -1,5 +1,7 @@
 package oprema.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,7 +12,7 @@ import javax.transaction.NotSupportedException;
  * */
 
 @Entity
-public class Proizvodi {
+public class Proizvodi implements Serializable{
 	public static int koeficijentCuvanja=100;
 
 	@Id
@@ -190,7 +192,7 @@ public class Proizvodi {
 		return "Proizvodi [sifra=" + sifra + ", naziv=" + naziv + ", cijena=" + cijena + ", pdv=" + pdv + ", rabat="
 				+ rabat + ", maliStanje=" + maliStanje + ", velikiStanje=" + velikiStanje + ", kolicina=" + kolicina
 				+ ", cijenaSaRabatom=" + cijenaSaRabatom + ", cijenaPDV=" + cijenaPDV + ", cijenaUkupno=" + cijenaUkupno
-				+ "]";
+				+ ", pozajmicaIzVelikog= "+pozajmicaIzVelikog+"]";
 	}
 
 	public void azurirajStanja() throws NotSupportedException {

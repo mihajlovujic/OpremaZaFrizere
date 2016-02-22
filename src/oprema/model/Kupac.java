@@ -1,11 +1,13 @@
 package oprema.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Kupac {
+public class Kupac implements Serializable{
 	@Column
 	private String naziv;
 	@Column
@@ -59,6 +61,29 @@ public class Kupac {
 
 	public void setPib(String pib) {
 		this.pib = pib;
+	}
+
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return pib.hashCode();
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Kupac){
+			if(((Kupac)obj).getPib() == this.pib)
+				return true;
+		}
+		return false;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Kupac["+this.pib+", "+this.naziv+", "+this.mjesto+", "+this.adresa+"];";
 	}
 
 

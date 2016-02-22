@@ -33,6 +33,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -46,6 +47,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
@@ -54,10 +56,12 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import oprema.aplikacija.HBoxRacunChooser.Akcija;
 import oprema.model.Kupac;
 import oprema.model.Obracun;
 import oprema.model.Proizvodi;
 import oprema.model.ProizvodiServis;
+import oprema.model.RacuniServis;
 
 public class Program extends Application {
 	ProizvodiServis ps=new ProizvodiServis();
@@ -68,6 +72,7 @@ public class Program extends Application {
 	KupacP kup;
 	Kupac izabraniK;
 	Stage glavniProzor;
+	WindowRacunChooser wc = new WindowRacunChooser();
 
 	@FXML
 	private ResourceBundle resources;
@@ -109,6 +114,9 @@ public class Program extends Application {
 	private TextField rabat;
 
 	@FXML
+	private Button prethodniRacuni;
+
+	@FXML
 	private TableView<Proizvodi> tabela;
 
 	@FXML
@@ -141,18 +149,19 @@ public class Program extends Application {
 	@FXML
 	private TextField cijena;
 
-
+	private VBox boxaca;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader loader=new FXMLLoader(this.getClass().getClassLoader().getResource("layout.fxml"));
 		bazaProzor=new BazaP(ps,up);
 		kup=new KupacP(ps);
 		loader.setController(this);
-		VBox boxaca=loader.load();
+		boxaca=loader.load();
 		Scene scena=new Scene(boxaca);
 		primaryStage.setScene(scena);
 		primaryStage.sizeToScene();
 		glavniProzor=primaryStage;
+		RacuniServis.ps = ps;
 		dodaj.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -351,6 +360,7 @@ public class Program extends Application {
 		assert ukupnoPDV != null : "fx:id=\"ukupnoPDV\" was not injected: check your FXML file 'layout.fxml'.";
 		assert saRabatom != null : "fx:id=\"saRabatom\" was not injected: check your FXML file 'layout.fxml'.";
 		assert rabat != null : "fx:id=\"rabat\" was not injected: check your FXML file 'layout.fxml'.";
+		assert prethodniRacuni != null : "fx:id=\"prethodniRacuni\" was not injected: check your FXML file 'layout.fxml'.";
 		assert tabela != null : "fx:id=\"tabela\" was not injected: check your FXML file 'layout.fxml'.";
 		assert magaciniB != null : "fx:id=\"magaciniB\" was not injected: check your FXML file 'layout.fxml'.";
 		assert ukupno != null : "fx:id=\"ukupno\" was not injected: check your FXML file 'layout.fxml'.";
@@ -404,8 +414,26 @@ public class Program extends Application {
 										up.dodajUArea(nadov);
 									}
 								}
+								for(Proizvodi a : RacuniServis.izbaceniProizvodi){
+									a.vratiStanja();
+									ps.apdejtujKolicine(a);
+								}
+								RacuniServis.izbaceniProizvodi.clear();
+								if(RacuniServis.akcija.equals(Akcija.IZMJENI)){
+									RacuniServis.dodajRacun(tabela.getItems(), izabraniK, RacuniServis.ucitaniRacun);
+								} else{
+									boolean uspjeh=RacuniServis.dodajRacun(tabela.getItems(), izabraniK, f.getName());
+									System.out.println("Sacuvan racun: "+uspjeh);
+								}
 								if(prikaz){
 									up.prikazi(true);
+								}
+								RacuniServis.akcija=null;
+								RacuniServis.ucitaniKupac=null;
+								RacuniServis.ucitaniProizvodi=null;
+								RacuniServis.ucitaniRacun=null;
+								if(boxaca.getChildren().size() == 6){
+									boxaca.getChildren().remove(5);
 								}
 							} catch (Exception e) {
 								up.setPoruka(e.getMessage());
@@ -491,6 +519,85 @@ public class Program extends Application {
 			}
 		});
 
+		prethodniRacuni.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				Platform.runLater(()->{
+					wc.prikazi();
+				});
+			}
+		});
+
+		wc.setOnHidden(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				if(RacuniServis.ucitaniRacun != null){
+					if(boxaca.getChildren().size() == 6){
+						boxaca.getChildren().remove(5);
+					}
+					HBox donjaTraka = new HBox();
+					donjaTraka.setAlignment(Pos.CENTER);
+					Label poruka = new Label();
+					poruka.setText("Racun "+RacuniServis.ucitaniRacun+" je u režimu "+RacuniServis.akcija);
+					Button pon = new Button("Poništi");
+					pon.setOnAction(new EventHandler<ActionEvent>() {
+
+						@Override
+						public void handle(ActionEvent event) {
+							boxaca.getChildren().remove(donjaTraka);
+							RacuniServis.ucitaniRacun=null;
+							RacuniServis.akcija=null;
+						}
+					});
+					donjaTraka.getChildren().addAll(poruka, pon);
+					boxaca.getChildren().add(donjaTraka);
+					if(RacuniServis.ucitaniKupac !=null){
+						kupacPIB.setText(RacuniServis.ucitaniKupac.getPib()+"");
+						kupacAdresa.setText(RacuniServis.ucitaniKupac.getAdresa());
+						kupacMjesto.setText(RacuniServis.ucitaniKupac.getMjesto());
+						kupacNaziv.setText(RacuniServis.ucitaniKupac.getNaziv());
+						izabraniK=RacuniServis.ucitaniKupac;
+					}
+					tabela.getItems().clear();
+					obracun.isprazni();
+					for(Proizvodi p : RacuniServis.ucitaniProizvodi){
+						Proizvodi izBaze = ps.getProizvodPoSifri(p.getSifra());
+						if(izBaze != null){
+							if(RacuniServis.akcija.equals(Akcija.IZMJENI)){
+								izBaze.setMaliStanje(izBaze.getMaliStanje()+p.getKolicina()-p.getPozajmicaIzVelikog());
+								izBaze.setVelikiStanje(izBaze.getVelikiStanje()+p.getPozajmicaIzVelikog());
+							}
+							izBaze.setKolicina(p.getKolicina());
+							izBaze.setCijena(p.getCijenaDb());
+							izBaze.setRabat(p.getRabat());
+							izBaze.setPdv(p.getPdv());
+							izBaze.setUsluge(p.isUsluge());
+							try {
+								izBaze.azurirajStanja();
+
+							} catch (NotSupportedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							postaviZbirove(izBaze);
+							tabela.getItems().add(izBaze);
+						} else{
+							p.setNaziv("");
+							p.setMaliStanje(9999);
+							p.setVelikiStanje(9999);
+							p.postaviSve();
+							postaviZbirove(p);
+							tabela.getItems().add(p);
+						}
+					}
+
+
+				}
+			}
+		});
+
 	}
 
 	private void napraviTabelu(TableView<Proizvodi> tabela2) {
@@ -513,13 +620,21 @@ public class Program extends Application {
 			@Override
 			public ObservableValue<String> call(CellDataFeatures<Proizvodi, String> param) {
 				SimpleStringProperty sp=new SimpleStringProperty(param.getValue().getNaziv());
+				sp.addListener(new ChangeListener<String>() {
+
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						param.getValue().setNaziv(newValue);
+					}
+				});
 				return sp;
 			}
 		});
 		nazivKol.setCellFactory(TextFieldTableCell.forTableColumn());
 		nazivKol.setPrefWidth(150);
 		nazivKol.setMaxWidth(Double.MAX_VALUE);
-		nazivKol.setEditable(false);
+		nazivKol.setEditable(true);
 
 		sifraKol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Proizvodi,String>, ObservableValue<String>>() {
 
@@ -1019,6 +1134,16 @@ public class Program extends Application {
 						Proizvodi tr=bc.getTableView().getItems().get(bc.getTableRow().getIndex());
 						bc.getTableView().getItems().remove(bc.getTableRow().getIndex());
 						postaviZbirove(tr,true);
+						if(RacuniServis.akcija.equals(Akcija.IZMJENI)){
+							boolean cont=false;
+							for(Proizvodi b : RacuniServis.ucitaniProizvodi){
+								if(b.getSifra().equals(tr.getSifra()))
+									cont=true;
+							}
+							if(cont){
+								RacuniServis.izbaceniProizvodi.add(tr);
+							}
+						}
 					}
 				});
 				return bc;
