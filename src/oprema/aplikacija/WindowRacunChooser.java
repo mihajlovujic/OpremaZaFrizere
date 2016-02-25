@@ -14,6 +14,7 @@ import oprema.model.RacuniServis;
 public class WindowRacunChooser extends Stage {
 
 	private VBox svi;
+	public String izbrisani = null;
 	public WindowRacunChooser(){
 
 		this.initModality(Modality.APPLICATION_MODAL);
@@ -37,6 +38,7 @@ public class WindowRacunChooser extends Stage {
 			novi.prefWidthProperty().bind(svi.widthProperty());
 			svi.getChildren().add(novi);
 		}
+		izbrisani = null;
 		this.show();
 	}
 
@@ -45,6 +47,7 @@ public class WindowRacunChooser extends Stage {
 	public void odradi(String ime, Akcija akcija) {
 		if(akcija.equals(Akcija.IZBRISI)){
 			RacuniServis.izbrisi(ime);
+			this.izbrisani = ime;
 		}
 		else{
 			RacuniServis.ucitajRacun(ime);

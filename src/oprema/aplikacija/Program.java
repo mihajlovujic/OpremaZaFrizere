@@ -419,11 +419,10 @@ public class Program extends Application {
 									ps.apdejtujKolicine(a);
 								}
 								RacuniServis.izbaceniProizvodi.clear();
-								if(RacuniServis.akcija.equals(Akcija.IZMJENI)){
+								if(RacuniServis.akcija == Akcija.IZMJENI){
 									RacuniServis.dodajRacun(tabela.getItems(), izabraniK, RacuniServis.ucitaniRacun);
 								} else{
-									boolean uspjeh=RacuniServis.dodajRacun(tabela.getItems(), izabraniK, f.getName());
-									System.out.println("Sacuvan racun: "+uspjeh);
+									RacuniServis.dodajRacun(tabela.getItems(), izabraniK, f.getName());
 								}
 								if(prikaz){
 									up.prikazi(true);
@@ -436,7 +435,7 @@ public class Program extends Application {
 									boxaca.getChildren().remove(5);
 								}
 							} catch (Exception e) {
-								up.setPoruka(e.getMessage());
+								up.setPoruka(e.toString());
 								up.prikazi();
 							}
 
@@ -549,6 +548,7 @@ public class Program extends Application {
 							boxaca.getChildren().remove(donjaTraka);
 							RacuniServis.ucitaniRacun=null;
 							RacuniServis.akcija=null;
+							resetujProizvode();
 						}
 					});
 					donjaTraka.getChildren().addAll(poruka, pon);
@@ -565,7 +565,7 @@ public class Program extends Application {
 					for(Proizvodi p : RacuniServis.ucitaniProizvodi){
 						Proizvodi izBaze = ps.getProizvodPoSifri(p.getSifra());
 						if(izBaze != null){
-							if(RacuniServis.akcija.equals(Akcija.IZMJENI)){
+							if(RacuniServis.akcija == Akcija.IZMJENI){
 								izBaze.setMaliStanje(izBaze.getMaliStanje()+p.getKolicina()-p.getPozajmicaIzVelikog());
 								izBaze.setVelikiStanje(izBaze.getVelikiStanje()+p.getPozajmicaIzVelikog());
 							}
@@ -594,6 +594,23 @@ public class Program extends Application {
 					}
 
 
+				}
+				if(wc.izbrisani != null){
+					if(wc.izbrisani.equals(RacuniServis.ucitaniRacun)){
+						if(boxaca.getChildren().size() == 6){
+							boxaca.getChildren().remove(5);
+							RacuniServis.ucitaniRacun = null;
+							RacuniServis.ucitaniProizvodi = null;
+							RacuniServis.ucitaniKupac = null;
+							RacuniServis.izbaceniProizvodi.clear();
+							resetujProizvode();
+							izabraniK = null;
+							kupacAdresa.setText("");
+							kupacMjesto.setText("");
+							kupacNaziv.setText("");
+							kupacPIB.setText("");
+						}
+					}
 				}
 			}
 		});
@@ -1134,7 +1151,7 @@ public class Program extends Application {
 						Proizvodi tr=bc.getTableView().getItems().get(bc.getTableRow().getIndex());
 						bc.getTableView().getItems().remove(bc.getTableRow().getIndex());
 						postaviZbirove(tr,true);
-						if(RacuniServis.akcija.equals(Akcija.IZMJENI)){
+						if(RacuniServis.akcija == Akcija.IZMJENI){
 							boolean cont=false;
 							for(Proizvodi b : RacuniServis.ucitaniProizvodi){
 								if(b.getSifra().equals(tr.getSifra()))
@@ -1206,6 +1223,14 @@ public class Program extends Application {
 		ukupnoC.setText(obracun.getUkupnoSve()+"");
 	}
 
+	public void resetujProizvode(){
+		tabela.getItems().clear();
+		obracun.isprazni();
+
+		ukupnoG.setText(obracun.getGlavnicaUDb()+"");
+		ukupnoPDV.setText(obracun.getPdvUDb()+"");
+		ukupnoC.setText(obracun.getUkupnoSve()+"");
+	}
 	public static void main(String[] args) {
 		launch(args);
 	}

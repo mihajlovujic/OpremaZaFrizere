@@ -29,7 +29,7 @@ public class RacuniServis {
 	static{
 		File f=new File(putanjaDoRacuna);
 
-		System.out.println(f.toPath());
+		System.out.println(f.toPath()+"\t"+putanjaDoRacuna);
 		if(!f.exists()){
 			try {
 				Files.createDirectory(f.toPath());
@@ -44,7 +44,7 @@ public class RacuniServis {
 	public static String ucitaniRacun=null;
 	public static Akcija akcija = null;
 	public static ProizvodiServis ps = null;
-	public static List<Proizvodi> izbaceniProizvodi= new ArrayList<>();
+	public static List<Proizvodi> izbaceniProizvodi= new ArrayList<Proizvodi>();
 
 	public static List<String> napravljeniRacuni(){
 		List<String> rezultat=new ArrayList<>();
@@ -77,11 +77,15 @@ public class RacuniServis {
 		if(imeFajla.indexOf(".xls") != -1){
 			imeFajla=imeFajla.substring(0, imeFajla.indexOf(".xls"));
 		}
-		if(akcija.equals(Akcija.IZMJENI)){
-		}
-		DateFormat df=new SimpleDateFormat("dd-MM-yy HH:mm");
+		String putanja = putanjaDoRacuna+imeFajla;
 
-		String putanja=putanjaDoRacuna+imeFajla+(akcija.equals(Akcija.IZMJENI) ? "" : ("("+(df.format(new Date()))+")"))+".rac";
+		DateFormat df=new SimpleDateFormat("dd-MM-yy HH-mm");
+		if(akcija == Akcija.IZMJENI){
+			putanja=putanja+".rac";
+		} else{
+			putanja=putanja+"("+(df.format(new Date()))+")"+".rac";
+		}
+
 		File fajl=new File(putanja);
 		fajl.getParentFile().mkdirs();
 		PrintWriter print=null;
@@ -153,11 +157,14 @@ public class RacuniServis {
 	}
 
 	public static void izbrisi(String ime) {
+		List<Proizvodi> tempProizvodi = ucitaniProizvodi;
+		Kupac tempKupac = ucitaniKupac;
+		String tempRacun = ucitaniRacun;
 		ucitajRacun(ime);
 		izbrisiKolicine(ucitaniProizvodi);
-		ucitaniProizvodi = null;
-		ucitaniKupac = null;
-		ucitaniRacun = null;
+		ucitaniProizvodi = tempProizvodi;
+		ucitaniKupac = tempKupac;
+		ucitaniRacun = tempRacun;
 		try {
 			Files.delete((new File(putanjaDoRacuna+ime+".rac")).toPath());
 		} catch (IOException e) {
